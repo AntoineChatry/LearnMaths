@@ -1,0 +1,326 @@
+import { continuiteCards } from "./continuite/cards";
+import { continuiteGenerators } from "./continuite/exercises";
+import { ContinuiteLesson } from "./continuite/Lesson";
+import { derivationCards } from "./derivation/cards";
+import { derivationGenerators } from "./derivation/exercises";
+import { DerivationLesson } from "./derivation/Lesson";
+import { gradientCards } from "./gradient/cards";
+import { gradientGenerators } from "./gradient/exercises";
+import { GradientLesson } from "./gradient/Lesson";
+import { integrationCards } from "./integration/cards";
+import { integrationGenerators } from "./integration/exercises";
+import { IntegrationLesson } from "./integration/Lesson";
+import { seriesCards } from "./series/cards";
+import { seriesGenerators } from "./series/exercises";
+import { SeriesLesson } from "./series/Lesson";
+import { taylorCards } from "./taylor/cards";
+import { taylorGenerators } from "./taylor/exercises";
+import { TaylorLesson } from "./taylor/Lesson";
+import { rappelsCards } from "./rappels/cards";
+import { rappelsGenerators } from "./rappels/exercises";
+import { RappelsLesson } from "./rappels/Lesson";
+import { limitesCards } from "./limites/cards";
+import { limitesGenerators } from "./limites/exercises";
+import { LimitesLesson } from "./limites/Lesson";
+import { secondDegreCards } from "./second-degre/cards";
+import { secondDegreGenerators } from "./second-degre/exercises";
+import { SecondDegreLesson } from "./second-degre/Lesson";
+import { vecteursCards } from "./vecteurs/cards";
+import { vecteursGenerators } from "./vecteurs/exercises";
+import { VecteursLesson } from "./vecteurs/Lesson";
+import { matricesCards } from "./matrices/cards";
+import { matricesGenerators } from "./matrices/exercises";
+import { MatricesLesson } from "./matrices/Lesson";
+import { systemesCards } from "./systemes/cards";
+import { systemesGenerators } from "./systemes/exercises";
+import { SystemesLesson } from "./systemes/Lesson";
+import { espacesCards } from "./espaces/cards";
+import { espacesGenerators } from "./espaces/exercises";
+import { EspacesLesson } from "./espaces/Lesson";
+import { determinantCards } from "./determinant/cards";
+import { determinantGenerators } from "./determinant/exercises";
+import { DeterminantLesson } from "./determinant/Lesson";
+import { orthogonaliteCards } from "./orthogonalite/cards";
+import { orthogonaliteGenerators } from "./orthogonalite/exercises";
+import { OrthogonaliteLesson } from "./orthogonalite/Lesson";
+import { valeursPropresCards } from "./valeurs-propres/cards";
+import { valeursPropresGenerators } from "./valeurs-propres/exercises";
+import { ValeursPropresLesson } from "./valeurs-propres/Lesson";
+import { symetriquesCards } from "./symetriques/cards";
+import { symetriquesGenerators } from "./symetriques/exercises";
+import { SymetriquesLesson } from "./symetriques/Lesson";
+import { svdCards } from "./svd/cards";
+import { svdGenerators } from "./svd/exercises";
+import { SvdLesson } from "./svd/Lesson";
+import { probasBaseCards } from "./probas-base/cards";
+import { probasBaseGenerators } from "./probas-base/exercises";
+import { ProbasBaseLesson } from "./probas-base/Lesson";
+import { conditionnellesCards } from "./conditionnelles/cards";
+import { conditionnellesGenerators } from "./conditionnelles/exercises";
+import { ConditionnellesLesson } from "./conditionnelles/Lesson";
+import { loisDiscretesCards } from "./lois-discretes/cards";
+import { loisDiscretesGenerators } from "./lois-discretes/exercises";
+import { LoisDiscretesLesson } from "./lois-discretes/Lesson";
+import { esperanceCards } from "./esperance/cards";
+import { esperanceGenerators } from "./esperance/exercises";
+import { EsperanceLesson } from "./esperance/Lesson";
+import { loisContinuesCards } from "./lois-continues/cards";
+import { loisContinuesGenerators } from "./lois-continues/exercises";
+import { LoisContinuesLesson } from "./lois-continues/Lesson";
+import { loisJointesCards } from "./lois-jointes/cards";
+import { loisJointesGenerators } from "./lois-jointes/exercises";
+import { LoisJointesLesson } from "./lois-jointes/Lesson";
+import { gaussienneCards } from "./gaussienne/cards";
+import { gaussienneGenerators } from "./gaussienne/exercises";
+import { GaussienneLesson } from "./gaussienne/Lesson";
+import { grandsNombresCards } from "./grands-nombres/cards";
+import { grandsNombresGenerators } from "./grands-nombres/exercises";
+import { GrandsNombresLesson } from "./grands-nombres/Lesson";
+import { vraisemblanceCards } from "./vraisemblance/cards";
+import { vraisemblanceGenerators } from "./vraisemblance/exercises";
+import { VraisemblanceLesson } from "./vraisemblance/Lesson";
+import type { SkillNode } from "./types";
+
+export type Module = { id: string; title: string; nodes: SkillNode[] };
+
+export const analyse: SkillNode[] = [
+  {
+    id: "rappels",
+    title: "Rappels express et positionnement",
+    bridge: "Bagage STI2D : dérivées, primitives, exp et ln",
+    lesson: RappelsLesson,
+    generators: rappelsGenerators,
+    cards: rappelsCards,
+  },
+  {
+    id: "second-degre",
+    title: "Second degré et discriminant",
+    bridge: "La perte quadratique de la régression linéaire de CS221 est une parabole",
+    lesson: SecondDegreLesson,
+    generators: secondDegreGenerators,
+    cards: secondDegreCards,
+  },
+  {
+    id: "limites",
+    title: "Limites",
+    bridge: "La sigmoïde des réseaux de neurones de CS221, vue en +∞ et en −∞",
+    lesson: LimitesLesson,
+    generators: limitesGenerators,
+    cards: limitesCards,
+  },
+  {
+    id: "continuite",
+    title: "Continuité et valeurs intermédiaires",
+    bridge: "Pourquoi la recherche dichotomique trouve toujours une racine",
+    lesson: ContinuiteLesson,
+    generators: continuiteGenerators,
+    cards: continuiteCards,
+  },
+  {
+    id: "derivation",
+    title: "Dérivation approfondie et trigo réciproque",
+    bridge: "La descente de gradient de CS221, et arctan cousine de la sigmoïde",
+    lesson: DerivationLesson,
+    generators: derivationGenerators,
+    cards: derivationCards,
+  },
+  {
+    id: "integration",
+    title: "Intégration",
+    bridge: "Une boucle for qui somme des rectangles de plus en plus fins",
+    lesson: IntegrationLesson,
+    generators: integrationGenerators,
+    cards: integrationCards,
+  },
+  {
+    id: "series",
+    title: "Suites et séries",
+    bridge: "Une boucle infinie qui renvoie pourtant un nombre fini",
+    lesson: SeriesLesson,
+    generators: seriesGenerators,
+    cards: seriesCards,
+  },
+  {
+    id: "taylor",
+    title: "Développements de Taylor",
+    bridge: "Comment une machine calcule sin et exp",
+    lesson: TaylorLesson,
+    generators: taylorGenerators,
+    cards: taylorCards,
+  },
+  {
+    id: "gradient",
+    title: "Dérivées partielles et gradient",
+    bridge: "Re-dériver à la main la régression linéaire et la SGD de CS221",
+    lesson: GradientLesson,
+    generators: gradientGenerators,
+    cards: gradientCards,
+  },
+];
+
+export const algebreLineaire: SkillNode[] = [
+  {
+    id: "vecteurs",
+    title: "Vecteurs et produit scalaire",
+    bridge: "Un embedding est un vecteur, et deux mots proches ont un grand cosinus",
+    lesson: VecteursLesson,
+    generators: vecteursGenerators,
+    cards: vecteursCards,
+  },
+  {
+    id: "matrices",
+    title: "Matrices et applications linéaires",
+    bridge: "Une couche de réseau de neurones calcule Wx + b",
+    lesson: MatricesLesson,
+    generators: matricesGenerators,
+    cards: matricesCards,
+  },
+  {
+    id: "systemes",
+    title: "Systèmes linéaires et élimination de Gauss",
+    bridge: "Résoudre en grand les équations normales du chapitre Gradient",
+    lesson: SystemesLesson,
+    generators: systemesGenerators,
+    cards: systemesCards,
+  },
+  {
+    id: "espaces",
+    title: "Indépendance, base, dimension et rang",
+    bridge: "Combien d'informations différentes contient vraiment une matrice",
+    lesson: EspacesLesson,
+    generators: espacesGenerators,
+    cards: espacesCards,
+  },
+  {
+    id: "determinant",
+    title: "Déterminant et inverse",
+    bridge: "De combien une couche étire l'espace, et si on peut revenir en arrière",
+    lesson: DeterminantLesson,
+    generators: determinantGenerators,
+    cards: determinantCards,
+  },
+  {
+    id: "orthogonalite",
+    title: "Orthogonalité, projections et moindres carrés",
+    bridge: "La régression linéaire comme une ombre portée",
+    lesson: OrthogonaliteLesson,
+    generators: orthogonaliteGenerators,
+    cards: orthogonaliteCards,
+  },
+  {
+    id: "valeurs-propres",
+    title: "Valeurs propres et vecteurs propres",
+    bridge: "Les directions qu'une matrice ne fait qu'étirer, et le zigzag de la descente de gradient",
+    lesson: ValeursPropresLesson,
+    generators: valeursPropresGenerators,
+    cards: valeursPropresCards,
+  },
+  {
+    id: "symetriques",
+    title: "Matrices symétriques et formes quadratiques",
+    bridge: "La hessienne décide de la forme du bol",
+    lesson: SymetriquesLesson,
+    generators: symetriquesGenerators,
+    cards: symetriquesCards,
+  },
+  {
+    id: "svd",
+    title: "SVD, PCA et rang faible",
+    bridge: "L'idée derrière LoRA : une grosse matrice presque de rang faible",
+    lesson: SvdLesson,
+    generators: svdGenerators,
+    cards: svdCards,
+  },
+];
+
+export const probas: SkillNode[] = [
+  {
+    id: "probas-base",
+    title: "Probabilités et dénombrement",
+    bridge: "Le paradoxe des anniversaires, ou pourquoi les collisions de hachage arrivent si tôt",
+    lesson: ProbasBaseLesson,
+    generators: probasBaseGenerators,
+    cards: probasBaseCards,
+  },
+  {
+    id: "conditionnelles",
+    title: "Probabilités conditionnelles et formule de Bayes",
+    bridge: "Un filtre anti-spam bayésien, et le piège du test fiable à 99 %",
+    lesson: ConditionnellesLesson,
+    generators: conditionnellesGenerators,
+    cards: conditionnellesCards,
+  },
+  {
+    id: "lois-discretes",
+    title: "Variables aléatoires discrètes et lois usuelles",
+    bridge: "Le prochain token tiré par un modèle de langage est une variable aléatoire",
+    lesson: LoisDiscretesLesson,
+    generators: loisDiscretesGenerators,
+    cards: loisDiscretesCards,
+  },
+  {
+    id: "esperance",
+    title: "Espérance et variance",
+    bridge: "La perte d'entraînement est une moyenne, et un minibatch l'estime",
+    lesson: EsperanceLesson,
+    generators: esperanceGenerators,
+    cards: esperanceCards,
+  },
+  {
+    id: "lois-continues",
+    title: "Variables continues et changement de variable",
+    bridge: "Des poids initialisés au hasard, selon une loi normale",
+    lesson: LoisContinuesLesson,
+    generators: loisContinuesGenerators,
+    cards: loisContinuesCards,
+  },
+  {
+    id: "lois-jointes",
+    title: "Lois jointes, covariance et espérance conditionnelle",
+    bridge: "Deux features corrélées, et la matrice de covariance de la PCA",
+    lesson: LoisJointesLesson,
+    generators: loisJointesGenerators,
+    cards: loisJointesCards,
+  },
+  {
+    id: "gaussienne",
+    title: "La gaussienne multivariée",
+    bridge: "Le bruit d'un modèle de diffusion et l'espace latent d'un VAE",
+    lesson: GaussienneLesson,
+    generators: gaussienneGenerators,
+    cards: gaussienneCards,
+  },
+  {
+    id: "grands-nombres",
+    title: "Loi des grands nombres et théorème central limite",
+    bridge: "Pourquoi un plus gros minibatch donne un gradient moins bruité",
+    lesson: GrandsNombresLesson,
+    generators: grandsNombresGenerators,
+    cards: grandsNombresCards,
+  },
+  {
+    id: "vraisemblance",
+    title: "Maximum de vraisemblance et estimation bayésienne",
+    bridge: "L'entropie croisée et le weight decay sortent d'un même principe",
+    lesson: VraisemblanceLesson,
+    generators: vraisemblanceGenerators,
+    cards: vraisemblanceCards,
+  },
+];
+
+export const modules: Module[] = [
+  { id: "analyse", title: "Analyse", nodes: analyse },
+  { id: "algebre-lineaire", title: "Algèbre linéaire", nodes: algebreLineaire },
+  { id: "probas", title: "Probabilités et statistiques", nodes: probas },
+];
+
+export const allNodes: SkillNode[] = modules.flatMap((m) => m.nodes);
+
+// Finds a chapter by id, with its module and its number inside the module (1-based).
+export function locateNode(id?: string): { node: SkillNode; module: Module; number: number } | null {
+  for (const module of modules) {
+    const i = module.nodes.findIndex((n) => n.id === id);
+    if (i !== -1) return { node: module.nodes[i], module, number: i + 1 };
+  }
+  return null;
+}

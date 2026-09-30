@@ -1,0 +1,1243 @@
+/* Graph-paper notebook: paper, grid, blue ink, red margin, highlighter. */
+:root {
+  --paper: #fafbfd;
+  --grid: #dce5f0;
+  --ink: #1d3f8f;
+  --ink-soft: #5a73b3;
+  --margin: #d6455a;
+  --highlight: #ffe45c;
+  --text: #262a31;
+  --text-muted: #5d6470;
+  --ok: #1f7a4d;
+  --code-bg: #eef2f8;
+
+  --cell: 20px;
+  --margin-x: 88px;
+
+  --serif: "Source Serif 4", Georgia, serif;
+  --sans: "Atkinson Hyperlegible", system-ui, sans-serif;
+
+  color-scheme: light;
+}
+
+/* At night, the notebook becomes a blackboard: follows the system, unless the toggle has forced a theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1c2530;
+    --grid: #26313e;
+    --ink: #9dc1ff;
+    --ink-soft: #7392c4;
+    --margin: #ff7a8a;
+    --highlight: #8a7a1f;
+    --text: #e8ebef;
+    --text-muted: #a3acb8;
+    --ok: #6fd6a0;
+    --code-bg: #243040;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #1c2530;
+  --grid: #26313e;
+  --ink: #9dc1ff;
+  --ink-soft: #7392c4;
+  --margin: #ff7a8a;
+  --highlight: #8a7a1f;
+  --text: #e8ebef;
+  --text-muted: #a3acb8;
+  --ok: #6fd6a0;
+  --code-bg: #243040;
+  color-scheme: dark;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+/* The notebook's red margin. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 auto 0 var(--margin-x);
+  width: 2px;
+  background: var(--margin);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+a {
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.sheet {
+  max-width: calc(var(--margin-x) + 46rem);
+  padding: 3rem 1.5rem 6rem calc(var(--margin-x) + 2rem);
+}
+
+.sheet-head {
+  margin-bottom: 3rem;
+}
+
+.subject {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--margin);
+}
+
+h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+h3 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+p {
+  margin: 0 0 1rem;
+  max-width: 68ch;
+}
+
+.bridge {
+  margin-top: 0.75rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.back {
+  margin-bottom: 2rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+/* ---------- Table of contents ---------- */
+
+.module + .module {
+  margin-top: 3rem;
+}
+
+.module-title {
+  margin-bottom: 0.5rem;
+}
+
+.contents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.contents li > a,
+.contents li > div {
+  display: grid;
+  grid-template-columns: 2.5rem auto 1fr auto;
+  align-items: baseline;
+  gap: 0 0.75rem;
+  /* The row starts inside the margin so the number sits left of the red line, like .section-num. */
+  margin-left: -5rem;
+  padding: 0.9rem 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.contents-num {
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--margin);
+  text-align: right;
+  grid-column: 1;
+}
+
+.contents-body {
+  grid-column: 2;
+  /* Aligns titles with the page heading: 5rem = 2.5rem column + 0.75rem gap + 1.75rem. */
+  margin-left: 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.contents-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.contents-title.is-mastered {
+  background: linear-gradient(transparent 55%, var(--highlight) 55%, var(--highlight) 92%, transparent 92%);
+}
+
+.contents-bridge {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.contents-leader {
+  grid-column: 3;
+  border-bottom: 2px dotted var(--grid);
+  transform: translateY(-0.35rem);
+  min-width: 1rem;
+}
+
+.contents-status {
+  grid-column: 4;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+}
+
+.is-ready .contents-status {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.is-ready a:hover .contents-title {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.is-draft {
+  color: var(--text-muted);
+}
+
+.is-draft .contents-title {
+  font-weight: 400;
+}
+
+/* ---------- Lesson ---------- */
+
+.section {
+  margin: 0 0 4rem;
+}
+
+.section-num {
+  float: left;
+  margin-left: calc(-2rem - 3rem);
+  width: 2.5rem;
+  text-align: right;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1.25;
+  color: var(--margin);
+}
+
+.tex-block {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.aside-cs {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--ink);
+  background: color-mix(in srgb, var(--paper) 85%, var(--ink));
+}
+
+.aside-cs p:last-child {
+  margin-bottom: 0;
+}
+
+.aside-cs-title {
+  margin: 0 0 0.35rem;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+pre {
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  background: var(--code-bg);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+code,
+kbd {
+  font-family: "Cascadia Code", Consolas, monospace;
+}
+
+/* ---------- Visualizations ---------- */
+
+.viz {
+  margin: 1.75rem 0;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+/* Mafs declares its variables on .MafsView: they must be overridden at the same level. */
+.viz .MafsView {
+  --mafs-bg: var(--paper);
+  --grid-line-subdivision-color: color-mix(in srgb, var(--grid) 50%, var(--paper));
+  --mafs-pink: var(--margin);
+  --mafs-fg: var(--text);
+  --mafs-line-color: var(--grid);
+  --mafs-origin-color: var(--text-muted);
+  --mafs-blue: var(--ink);
+  --mafs-red: var(--margin);
+  --mafs-yellow: var(--highlight);
+  --mafs-green: var(--ok);
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  padding: 0.9rem 1.1rem;
+  border-top: 2px solid var(--ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+.viz-controls label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.viz-controls input[type="range"] {
+  accent-color: var(--ink);
+  width: 9rem;
+}
+
+.viz-readout {
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-verdict-ok {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.viz-verdict-ko {
+  color: var(--margin);
+  font-weight: 700;
+}
+
+.viz-formulas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 1.1rem;
+  border-top: 1px solid var(--ink-soft);
+  font-size: 1.05rem;
+  overflow-x: auto;
+}
+
+.viz-delta {
+  margin: 0.35rem 0 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+.viz-caption {
+  margin: -0.75rem 0 1.75rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.value-table {
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  margin: 1rem 0;
+}
+
+.value-table th,
+.value-table td {
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--ink-soft);
+  text-align: right;
+}
+
+.value-table th {
+  color: var(--ink);
+}
+
+/* ---------- Practice ---------- */
+
+.practice {
+  padding: 1.5rem 1.5rem 1.75rem;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.practice-dots {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+
+.practice-dots li {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+
+.practice-dots li.done {
+  background: var(--ink);
+}
+
+.practice-dots li.current {
+  background: var(--highlight);
+}
+
+.practice-intro {
+  margin-bottom: 0.5rem;
+}
+
+.practice-code {
+  margin-top: 0;
+}
+
+.answer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.math-input {
+  flex: 1 1 14rem;
+  min-height: 3rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 1.35rem;
+  border: 2px solid var(--ink-soft);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--text);
+  --caret-color: var(--ink);
+  --selection-background-color: var(--highlight);
+}
+
+.answer-correct .math-input {
+  border-color: var(--ok);
+  background: color-mix(in srgb, var(--paper) 88%, var(--ok));
+}
+
+.answer-wrong .math-input {
+  border-color: var(--margin);
+  background: color-mix(in srgb, var(--paper) 90%, var(--margin));
+}
+
+.answer-tip {
+  margin: 0.5rem 0 1rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+kbd {
+  padding: 0 0.3rem;
+  border: 1px solid var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.btn {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-quiet {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.hint {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.verdict {
+  font-family: var(--sans);
+  margin-top: 1rem;
+}
+
+.verdict-ok {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.verdict-ko {
+  color: var(--margin);
+}
+
+.verdict-ko p {
+  margin: 0;
+}
+
+.solution {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--grid);
+}
+
+.solution .tex-block {
+  margin: 0.5rem 0;
+}
+
+.practice-done {
+  text-align: left;
+}
+
+.practice-score {
+  margin: 0 0 0.5rem;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* ---------- Concept cards ---------- */
+
+.concept-list {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.concept-card {
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--ink-soft);
+  background: var(--paper);
+}
+
+/* In a review queue, the card is already framed by .practice. */
+.practice .concept-card {
+  padding: 0;
+  border: 0;
+}
+
+.concept-front {
+  margin: 0 0 0.6rem;
+  font-weight: 600;
+}
+
+.concept-back {
+  margin: 0.25rem 0 0.9rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--highlight);
+}
+
+.concept-grades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn-grade {
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 400;
+  padding: 0.4rem 0.9rem;
+}
+
+.concept-graded {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.review-next {
+  margin-top: 1rem;
+}
+
+/* ---------- Checkpoints and warm-up ---------- */
+
+.checkpoint {
+  margin: -2rem 0 4rem;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--highlight);
+}
+
+.checkpoint-title,
+.warmup-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.checkpoint-gate {
+  margin: -2rem 0 4rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.warmup {
+  margin: 0 0 4rem;
+}
+
+.warmup-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+/* ---------- Workshop (games) ---------- */
+
+.game-list {
+  display: grid;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.game-list p {
+  margin: 0.25rem 0 0;
+}
+
+.game-link {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.game-chapters {
+  margin-left: 0.75rem;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Quest world: top-down map drawn in SVG, one unit per cell. */
+.world {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--sans);
+}
+
+.world-floor {
+  fill: var(--paper);
+}
+
+.world-grid {
+  stroke: var(--grid);
+  stroke-width: 0.03;
+}
+
+.world-label {
+  font-size: 0.32px;
+  fill: var(--text-muted);
+  text-anchor: middle;
+}
+
+.world-wall {
+  fill: var(--ink-soft);
+  stroke: var(--paper);
+  stroke-width: 0.04;
+}
+
+.world-exit line {
+  stroke: var(--text);
+  stroke-width: 0.06;
+}
+
+.world-exit path {
+  fill: var(--text-muted);
+}
+
+.world-exit.is-open path {
+  fill: #2f9e5b;
+}
+
+.world-crystal {
+  fill: var(--highlight);
+  stroke: var(--ink);
+  stroke-width: 0.04;
+  animation: world-glow 1.6s ease-in-out infinite;
+}
+
+@keyframes world-glow {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.world-range {
+  fill: color-mix(in srgb, var(--margin) 10%, transparent);
+  stroke: var(--margin);
+  stroke-width: 0.04;
+  stroke-dasharray: 0.15 0.1;
+}
+
+.world-turret-body {
+  fill: var(--margin);
+}
+
+.world-turret-eye {
+  fill: var(--paper);
+}
+
+.world-turret.is-dead .world-turret-body {
+  fill: var(--text-muted);
+  opacity: 0.5;
+}
+
+.world-wreck {
+  stroke: var(--text-muted);
+  stroke-width: 0.08;
+}
+
+.world-shot line {
+  stroke: var(--ink);
+  stroke-width: 0.08;
+  stroke-linecap: round;
+}
+
+.world-shot .is-hit {
+  fill: var(--highlight);
+  opacity: 0.85;
+}
+
+.world-shot .is-miss {
+  fill: var(--ink);
+}
+
+.world-zap {
+  stroke: var(--margin);
+  stroke-width: 0.1;
+}
+
+.world-robot {
+  transition: transform 0.22s ease-in-out;
+}
+
+.world-robot-body {
+  fill: var(--ink);
+}
+
+.world-robot-eye {
+  fill: var(--paper);
+}
+
+.world-robot.is-dead .world-robot-body {
+  fill: var(--margin);
+}
+
+.world-robot.is-bump {
+  animation: world-bump 0.25s;
+}
+
+@keyframes world-bump {
+  30% {
+    opacity: 0.4;
+  }
+}
+
+.level-story p {
+  margin: 0 0 1rem;
+}
+
+.level-scene {
+  margin: 1.5rem 0;
+}
+
+/* Bayes: 1000 people by disease status and test result. */
+.bayes-grid {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.bayes-tp {
+  fill: var(--margin);
+  background: var(--margin);
+}
+
+.bayes-fn {
+  fill: color-mix(in srgb, var(--margin) 35%, var(--paper));
+  background: color-mix(in srgb, var(--margin) 35%, var(--paper));
+}
+
+.bayes-fp {
+  fill: var(--highlight);
+  background: var(--highlight);
+}
+
+.bayes-tn {
+  fill: color-mix(in srgb, var(--text-muted) 25%, var(--paper));
+  background: color-mix(in srgb, var(--text-muted) 25%, var(--paper));
+}
+
+.bayes-legend {
+  font-size: 0.95rem;
+  margin: 0.5rem 0 0;
+}
+
+.bayes-item {
+  white-space: nowrap;
+}
+
+.bayes-key {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 0.15em;
+  margin: 0 0.25em 0 0.6em;
+  vertical-align: -0.05em;
+}
+
+/* Next-token law: bars, and the cumulative distribution function as segments of [0, 1]. */
+.token-body {
+  padding: 0.9rem 1.1rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+.token-context {
+  margin: 0 0 0.75rem;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+
+.token-blank {
+  padding: 0 0.4em;
+  border-bottom: 2px solid var(--ink);
+}
+
+.token-bars {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.token-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr 4.2rem;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.token-row-drawn .token-name {
+  font-weight: 700;
+}
+
+.token-name {
+  white-space: nowrap;
+}
+
+.token-key {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.4em;
+  border-radius: 0.15em;
+  vertical-align: -0.05em;
+}
+
+.token-track {
+  height: 0.9rem;
+  background: color-mix(in srgb, var(--grid) 60%, var(--paper));
+}
+
+.token-bar {
+  display: block;
+  height: 100%;
+}
+
+.token-row .viz-readout {
+  text-align: right;
+}
+
+.token-c0 {
+  background: var(--ink);
+}
+
+.token-c1 {
+  background: var(--margin);
+}
+
+.token-c2 {
+  background: var(--ok);
+}
+
+.token-c3 {
+  background: var(--highlight);
+}
+
+.token-c4 {
+  background: var(--text-muted);
+}
+
+.token-label {
+  margin: 1rem 0 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.token-cdf {
+  position: relative;
+  display: flex;
+  height: 1.4rem;
+  border: 1px solid var(--ink);
+}
+
+.token-seg {
+  height: 100%;
+}
+
+.token-u {
+  position: absolute;
+  top: -0.35rem;
+  bottom: -0.35rem;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--text);
+}
+
+.token-axis {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.token-draw {
+  margin: 0.5rem 0 0;
+}
+
+/* Project: meteor rain. */
+.meteor-scene {
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.meteor {
+  fill: var(--margin);
+}
+
+.meteor-window {
+  fill: color-mix(in srgb, var(--highlight) 18%, transparent);
+  stroke: var(--ink);
+  stroke-width: 0.05;
+  stroke-dasharray: 0.15 0.1;
+}
+
+.meteor-cell {
+  fill: var(--paper);
+  stroke: var(--grid);
+  stroke-width: 0.04;
+}
+
+.meteor-cell.is-on {
+  fill: color-mix(in srgb, var(--margin) 35%, var(--paper));
+}
+
+.meteor-caption {
+  font-size: 0.4px;
+  fill: var(--text);
+}
+
+.loss-chart {
+  display: block;
+  width: 100%;
+  max-width: 34rem;
+  margin: 1rem auto 0;
+}
+
+.loss-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.loss-target {
+  stroke: #2f9e5b;
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.loss-label {
+  font-size: 9px;
+  fill: var(--text-muted);
+}
+
+.level-api {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+.level-api div {
+  margin-bottom: 0.4rem;
+}
+
+.level-api dt {
+  display: inline;
+  margin-right: 0.5rem;
+}
+
+.level-api dd {
+  display: inline;
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.level-api code,
+.level-console {
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.code-editor .cm-editor {
+  max-height: 28rem;
+}
+
+.level-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+.level-shortcut {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.level-console {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--ink-soft);
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.level-console.has-error {
+  border-left-color: var(--margin);
+}
+
+.level-verdict p {
+  margin: 0 0 0.75rem;
+}
+
+.game-hint {
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--highlight);
+}
+
+/* ---------- Home: links and roadmap ---------- */
+
+.home-links {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0.75rem 0 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+.roadmap {
+  margin-top: 4rem;
+  border-top: 2px solid var(--grid);
+  padding-top: 1.5rem;
+}
+
+.roadmap > summary {
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.roadmap-intro {
+  margin: 1rem 0 1.5rem;
+  color: var(--text-muted);
+}
+
+.roadmap-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid var(--ink-soft);
+}
+
+.roadmap-steps > li {
+  position: relative;
+  padding: 0 0 1.5rem 1.5rem;
+}
+
+.roadmap-steps > li::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 0.45rem;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.roadmap-steps > li.is-current::before {
+  background: var(--highlight);
+}
+
+.roadmap-steps > li.is-done::before {
+  background: var(--ink);
+}
+
+.roadmap-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.roadmap-status {
+  margin-left: 0.5rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.roadmap-steps p {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+}
+
+.roadmap-why {
+  color: var(--text-muted);
+}
+
+.roadmap-cue {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+}
+
+/* ---------- Mobile: the margin tightens. ---------- */
+
+@media (max-width: 640px) {
+  :root {
+    --margin-x: 40px;
+  }
+
+  .sheet {
+    padding: 2rem 16px 4rem calc(var(--margin-x) + 12px);
+  }
+
+  .section-num {
+    margin-left: calc(-12px - 2.5rem - 0.35rem);
+    width: 2rem;
+    font-size: 1rem;
+  }
+
+  .contents-num {
+    font-size: 1rem;
+  }
+
+  .contents li > a,
+  .contents li > div {
+    grid-template-columns: 2rem 1fr auto;
+    margin-left: calc(-12px - 2rem - 0.35rem);
+  }
+
+  .contents-body {
+    grid-column: 2;
+    margin-left: calc(12px - 0.4rem);
+  }
+
+  .contents-leader {
+    display: none;
+  }
+
+  .contents-status {
+    grid-column: 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
