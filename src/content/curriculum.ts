@@ -79,6 +79,30 @@ import { GrandsNombresLesson } from "./grands-nombres/Lesson";
 import { vraisemblanceCards } from "./vraisemblance/cards";
 import { vraisemblanceGenerators } from "./vraisemblance/exercises";
 import { VraisemblanceLesson } from "./vraisemblance/Lesson";
+import { jacobienneCards } from "./jacobienne/cards";
+import { jacobienneGenerators } from "./jacobienne/exercises";
+import { JacobienneLesson } from "./jacobienne/Lesson";
+import { chaineCards } from "./chaine/cards";
+import { chaineGenerators } from "./chaine/exercises";
+import { ChaineLesson } from "./chaine/Lesson";
+import { retropropagationCards } from "./retropropagation/cards";
+import { retropropagationGenerators } from "./retropropagation/exercises";
+import { RetropropagationLesson } from "./retropropagation/Lesson";
+import { newtonCards } from "./newton/cards";
+import { newtonGenerators } from "./newton/exercises";
+import { NewtonLesson } from "./newton/Lesson";
+import { optimiseursCards } from "./optimiseurs/cards";
+import { optimiseursGenerators } from "./optimiseurs/exercises";
+import { OptimiseursLesson } from "./optimiseurs/Lesson";
+import { convexiteCards } from "./convexite/cards";
+import { convexiteGenerators } from "./convexite/exercises";
+import { ConvexiteLesson } from "./convexite/Lesson";
+import { lagrangeCards } from "./lagrange/cards";
+import { lagrangeGenerators } from "./lagrange/exercises";
+import { LagrangeLesson } from "./lagrange/Lesson";
+import { dualiteCards } from "./dualite/cards";
+import { dualiteGenerators } from "./dualite/exercises";
+import { DualiteLesson } from "./dualite/Lesson";
 import type { SkillNode } from "./types";
 
 export type Module = { id: string; title: string; nodes: SkillNode[] };
@@ -308,10 +332,78 @@ export const probas: SkillNode[] = [
   },
 ];
 
+export const multivariable: SkillNode[] = [
+  {
+    id: "jacobienne",
+    title: "Fonctions vectorielles et jacobienne",
+    bridge: "Une couche de réseau rend un vecteur : sa dérivée est une matrice",
+    lesson: JacobienneLesson,
+    generators: jacobienneGenerators,
+    cards: jacobienneCards,
+  },
+  {
+    id: "chaine",
+    title: "Règle de la chaîne et gradients matriciels",
+    bridge: "Dériver une perte par rapport à une matrice de poids",
+    lesson: ChaineLesson,
+    generators: chaineGenerators,
+    cards: chaineCards,
+  },
+  {
+    id: "retropropagation",
+    title: "Rétropropagation et différentiation automatique",
+    bridge: "Ce que fait loss.backward() dans PyTorch",
+    lesson: RetropropagationLesson,
+    generators: retropropagationGenerators,
+    cards: retropropagationCards,
+  },
+  {
+    id: "newton",
+    title: "Taylor d'ordre 2 et méthode de Newton",
+    bridge: "Utiliser la courbure pour choisir le pas",
+    lesson: NewtonLesson,
+    generators: newtonGenerators,
+    cards: newtonCards,
+  },
+  {
+    id: "optimiseurs",
+    title: "Momentum, SGD et Adam",
+    bridge: "L'optimiseur qu'on passe à l'entraînement d'un réseau",
+    lesson: OptimiseursLesson,
+    generators: optimiseursGenerators,
+    cards: optimiseursCards,
+  },
+  {
+    id: "convexite",
+    title: "Convexité",
+    bridge: "Quand un minimum local est forcément le minimum global",
+    lesson: ConvexiteLesson,
+    generators: convexiteGenerators,
+    cards: convexiteCards,
+  },
+  {
+    id: "lagrange",
+    title: "Multiplicateurs de Lagrange",
+    bridge: "Optimiser sous contrainte : la PCA et le softmax en sortent",
+    lesson: LagrangeLesson,
+    generators: lagrangeGenerators,
+    cards: lagrangeCards,
+  },
+  {
+    id: "dualite",
+    title: "Conditions KKT et dualité",
+    bridge: "Les contraintes d'inégalité, et la machine à vecteurs de support",
+    lesson: DualiteLesson,
+    generators: dualiteGenerators,
+    cards: dualiteCards,
+  },
+];
+
 export const modules: Module[] = [
   { id: "analyse", title: "Analyse", nodes: analyse },
   { id: "algebre-lineaire", title: "Algèbre linéaire", nodes: algebreLineaire },
   { id: "probas", title: "Probabilités et statistiques", nodes: probas },
+  { id: "multivariable", title: "Calcul multivariable et optimisation", nodes: multivariable },
 ];
 
 export const allNodes: SkillNode[] = modules.flatMap((m) => m.nodes);

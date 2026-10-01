@@ -5,7 +5,7 @@ export const loisContinuesCards: ConceptCard[] = [
     id: "lc-densite",
     section: 1,
     front: "Densité d'une variable continue : définition, et que vaut $P(X = x)$ ?",
-    back: "$f \\ge 0$, $\\int f = 1$, et $P(a \\le X \\le b) = \\int_a^b f(x)\\,dx$. $P(X = x) = 0$ ; une densité n'est pas une probabilité et peut dépasser 1. $F' = f$.",
+    back: "$f \\ge 0$, $\\int f = 1$, et $P(a \\le X \\le b) = \\int_a^b f(x)\\,dx$. $P(X = x) = 0$ ; une densité n'est pas une probabilité et peut dépasser 1. $F' = f$ là où $f$ est continue.",
   },
   {
     id: "lc-exponentielle",
@@ -29,7 +29,7 @@ export const loisContinuesCards: ConceptCard[] = [
     id: "lc-inversion",
     section: 3,
     front: "Comment tirer selon une loi de fonction de répartition $F$ à partir d'un uniforme ?",
-    back: "$X = F^{-1}(U)$, car $P(F^{-1}(U) \\le x) = P(U \\le F(x)) = F(x)$. Exponentielle : $x = -\\ln(1 - u)/\\lambda$.",
+    back: "$X = F^{-1}(U)$, car $P(F^{-1}(U) \\le x) = P(U \\le F(x)) = F(x)$ ($F$ continue strictement croissante ; sinon, inverse généralisée $\\inf\\{x : F(x) \\ge u\\}$). Exponentielle : $x = -\\ln(1 - u)/\\lambda$.",
   },
   {
     id: "lc-init-variance",

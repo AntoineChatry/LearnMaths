@@ -5,7 +5,7 @@ export const vraisemblanceCards: ConceptCard[] = [
     id: "vr-vraisemblance",
     section: 1,
     front: "Vraisemblance et estimateur du maximum de vraisemblance ?",
-    back: "Pour des données i.i.d., $L(\\theta) = -\\sum_n \\log p(x_n \\mid \\theta)$, fonction de $\\theta$ (pas une loi sur $\\theta$). Le MLE minimise $L$. Pièce : $k/n$.",
+    back: "La vraisemblance est $p(x \\mid \\theta) = \\prod_n p(x_n \\mid \\theta)$ pour des données i.i.d., vue comme fonction de $\\theta$ (pas une loi sur $\\theta$). On travaille avec son opposé du logarithme, la log-vraisemblance négative $L(\\theta) = -\\sum_n \\log p(x_n \\mid \\theta)$ : le MLE maximise la vraisemblance, donc minimise $L$. Pièce : $k/n$.",
   },
   {
     id: "vr-biais-variance",

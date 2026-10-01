@@ -92,6 +92,14 @@ print((f(2, 1 + h) - f(2, 1 - h)) / (2 * h))   # 7.000000000001449`}</code>
           La parenthèse est la pente dans la direction <Tex>u</Tex>, la <strong>dérivée directionnelle</strong>. Et tu
           la reconnais : c'est un produit scalaire en base orthonormée, celui de Terminale.
         </p>
+        <p>
+          « Régulière » a un sens précis : la formule exige que <Tex>f</Tex> soit <strong>différentiable</strong> au
+          point, ce qui est le cas si ses dérivées partielles existent et sont continues autour (polynômes, exp, sin…).
+          Avoir des dérivées partielles ne suffit pas : <Tex>{"f(x, y) = \\frac{x^2 y}{x^2 + y^2}"}</Tex>, prolongée par{" "}
+          <Tex>{"f(0, 0) = 0"}</Tex>, a <Tex>{"\\nabla f(0, 0) = (0, 0)"}</Tex>, mais sa pente en 0 dans la direction{" "}
+          <Tex>{"u"}</Tex> vaut <Tex>{"u_1^2 u_2"}</Tex>, soit <Tex>{"\\frac{\\sqrt2}{4} \\neq 0"}</Tex> pour{" "}
+          <Tex>{"u = \\frac{1}{\\sqrt2}(1, 1)"}</Tex>.
+        </p>
         <Tex block>{"D_u f = \\nabla f \\cdot u = \\|\\nabla f\\|\\,\\|u\\|\\cos\\theta = \\|\\nabla f\\|\\cos\\theta"}</Tex>
         <p>
           où <Tex>{"\\theta"}</Tex> est l'angle entre <Tex>u</Tex> et le gradient. Tout se lit sur le cosinus :
@@ -300,9 +308,9 @@ for eta in [0.05, 0.13]:
 # 0.13 -10162599.887202654 -3456523.233643499`}</code>
         </pre>
         <p>
-          La vidéo suivante de CS221, la rétropropagation, sert à calculer ce gradient
-          quand la prédiction n'est plus <Tex>{"w x + b"}</Tex> mais un réseau de neurones. La réponse est la règle de
-          la chaîne, appliquée couche après couche, à des dérivées partielles.
+          La vidéo suivante de CS221, la rétropropagation, calcule ce gradient quand la prédiction n'est plus{" "}
+          <Tex>{"w x + b"}</Tex> mais un réseau de neurones. Tu y as vu la réponse : la règle de la chaîne, appliquée
+          couche après couche, à des dérivées partielles.
         </p>
         <p>
           C'est la fin du module Analyse. Il t'a laissé une équation matricielle, <Tex>{"X^\\top X\\,\\theta = X^\\top y"}</Tex>,

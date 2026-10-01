@@ -5,7 +5,7 @@ export const conditionnellesCards: ConceptCard[] = [
     id: "cond-definition",
     section: 1,
     front: "Que vaut $P(A \\mid B)$, et que fait-on concrètement en conditionnant ?",
-    back: "$P(A \\mid B) = P(A \\cap B) / P(B)$ : on retire les issues hors de $B$, puis on renormalise pour que la masse restante vaille 1.",
+    back: "$P(A \\mid B) = P(A \\cap B) / P(B)$, défini si $P(B) > 0$ : on retire les issues hors de $B$, puis on renormalise pour que la masse restante vaille 1.",
   },
   {
     id: "cond-procureur",

@@ -59,7 +59,7 @@ function quadraticForm(): Exercise {
       promptTex: `A = ${matTex([[a, b], [b, c]])} \\qquad x = (${x},\\ ${y})`,
       answerTex: String(value),
       hint: "$x^\\top A x = a x_1^2 + 2b\\, x_1 x_2 + c x_2^2$ pour $A = \\begin{pmatrix} a & b \\\\ b & c \\end{pmatrix}$.",
-      solution: [`x^\\top A x = ${a} \\times ${p(x)}^2 + 2 \\times ${p(b)} \\times ${p(x)} \\times ${p(y)} + ${c} \\times ${p(y)}^2 = ${value}`],
+      solution: [`x^\\top A x = ${a} \\times ${p(x)}^2 + 2 \\times ${p(b)} \\times ${p(x)} \\times ${p(y)} + ${p(c)} \\times ${p(y)}^2 = ${value}`],
     };
   }
   const b2 = randNonZero(-9, 9);

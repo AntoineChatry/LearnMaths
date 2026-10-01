@@ -35,7 +35,7 @@ export const valeursPropresCards: ConceptCard[] = [
     id: "vp-iteration",
     section: 4,
     front: "Que devient $A^k x_0$ quand $k$ grandit ?",
-    back: "$A^k x_0 = \\sum c_i \\lambda_i^k v_i$ : la valeur propre de plus grand module domine, et la direction tend vers son vecteur propre (méthode de la puissance, PageRank). Les composantes avec $|\\lambda| < 1$ s'éteignent, celles avec $|\\lambda| > 1$ explosent.",
+    back: "Dans une base de vecteurs propres, $A^k x_0 = \\sum c_i \\lambda_i^k v_i$. Si $|\\lambda_1|$ est strictement la plus grande et $c_1 \\neq 0$, ce terme domine et la direction de $A^k x_0$ tend vers $v_1$ (au signe près si $\\lambda_1 < 0$ : méthode de la puissance, PageRank). Sans ces deux conditions, pas de convergence garantie : avec $A = \\text{diag}(1, -1)$ et $x_0 = (1, 1)$, la direction oscille. Les composantes avec $|\\lambda| < 1$ s'éteignent, celles avec $|\\lambda| > 1$ explosent.",
   },
   {
     id: "vp-descente",

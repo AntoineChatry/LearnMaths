@@ -101,8 +101,11 @@ for n in (3, 10, 1000):
 # 1000 1.003`}</code>
         </pre>
         <p>
-          <strong>Le produit, lui, demande l'indépendance.</strong> Si <Tex>X</Tex> et <Tex>Y</Tex> sont
-          indépendantes, <Tex>{"E(XY) = E(X)\\,E(Y)"}</Tex> (théorème 6.4). Sans elle, c'est faux en général : avec{" "}
+          <strong>Le produit, lui, ne se sépare pas toujours.</strong> Si <Tex>X</Tex> et <Tex>Y</Tex> sont
+          indépendantes, <Tex>{"E(XY) = E(X)\\,E(Y)"}</Tex> (théorème 6.4). L'indépendance suffit, mais elle n'est
+          pas nécessaire : avec <Tex>X</Tex> uniforme sur <Tex>{"\\{-1, 0, 1\\}"}</Tex> et <Tex>{"Y = X^2"}</Tex>,
+          on a <Tex>{"E(XY) = E(X^3) = 0 = E(X)\\,E(Y)"}</Tex> alors que <Tex>Y</Tex> est entièrement déterminée
+          par <Tex>X</Tex>. Sans aucune hypothèse, l'égalité est fausse en général : avec{" "}
           <Tex>X</Tex> qui vaut 1 sur pile et 0 sur face, et <Tex>{"Y = 1 - X"}</Tex>, on a{" "}
           <Tex>{"XY = 0"}</Tex> toujours, alors que <Tex>{"E(X)\\,E(Y) = 1/4"}</Tex> (exemple 6.10).
         </p>
@@ -131,8 +134,12 @@ for n in (3, 10, 1000):
         </p>
         <Tex block>{"V(cX + b) = c^2\\, V(X) \\qquad\\qquad V(X + Y) = V(X) + V(Y)"}</Tex>
         <p>
-          Ici l'indépendance est nécessaire : <Tex>{"V(X + X) = V(2X) = 4\\,V(X)"}</Tex>, pas{" "}
-          <Tex>{"2\\,V(X)"}</Tex>. Attention aussi au signe : <Tex>{"V(X - Y) = V(X) + V(Y)"}</Tex>, car{" "}
+          Sans hypothèse, c'est faux : <Tex>{"V(X + X) = V(2X) = 4\\,V(X)"}</Tex>, pas{" "}
+          <Tex>{"2\\,V(X)"}</Tex>. En développant le carré, on obtient en général{" "}
+          <Tex>{"V(X + Y) = V(X) + V(Y) + 2\\big(E(XY) - E(X)\\,E(Y)\\big)"}</Tex> : les variances s'ajoutent
+          exactement quand <Tex>{"E(XY) = E(X)\\,E(Y)"}</Tex> (variables <strong>non corrélées</strong>, voir le
+          chapitre sur les lois jointes). L'indépendance est donc une condition suffisante, pas nécessaire : l'exemple{" "}
+          <Tex>{"Y = X^2"}</Tex> ci-dessus a des variances additives sans être indépendant. Attention aussi au signe : <Tex>{"V(X - Y) = V(X) + V(Y)"}</Tex>, car{" "}
           <Tex>{"(-1)^2 = 1"}</Tex>. En sommant <Tex>n</Tex> indicatrices indépendantes de variance{" "}
           <Tex>{"p(1 - p)"}</Tex>, la binomiale a pour variance <Tex>{"np(1-p)"}</Tex>. La loi géométrique a pour
           variance <Tex>{"(1-p)/p^2"}</Tex> (exemple 6.19), soit 30 pour l'attente d'un 6, et la loi de Poisson{" "}
@@ -166,9 +173,12 @@ print(np.mean(x**2) - x.mean()**2)  # moyenne des carrés - carré
           remplace par la moyenne sur un <strong>minibatch</strong> de <Tex>B</Tex> exemples tirés au hasard.
         </p>
         <p>
-          MML (section 7.1.3) explique pourquoi c'est légitime : pour que la descente converge, il suffit que le
-          gradient utilisé soit une <strong>estimation sans biais</strong> du vrai gradient, c'est-à-dire que son
-          espérance soit le vrai gradient. Pour <Tex>B</Tex> indices tirés indépendamment et uniformément, notons{" "}
+          MML (section 7.1.3) explique pourquoi c'est légitime : l'ingrédient clé est que le gradient utilisé soit
+          une <strong>estimation sans biais</strong> du vrai gradient, c'est-à-dire que son espérance soit le vrai
+          gradient. Ce n'est pas suffisant à lui seul : la remarque qui suit dans MML précise que la convergence
+          demande aussi un pas d'apprentissage qui décroît au bon rythme, sous des hypothèses supplémentaires
+          (conditions de Robbins et Monro, vues au chapitre sur les séries). Avec un pas constant, le bruit du
+          minibatch empêche de se poser exactement sur le minimum. Pour <Tex>B</Tex> indices tirés indépendamment et uniformément, notons{" "}
           <Tex>{"\\sigma^2"}</Tex> la variance de <Tex>{"\\ell_I"}</Tex>. La linéarité de l'espérance et l'additivité
           des variances donnent (Grinstead et Snell, théorème 6.9) :
         </p>

@@ -96,8 +96,8 @@ function derivativeProductQuotient(): Exercise {
       answerTex: ans,
       hint: "Produit $uv$ avec $u = $ le facteur affine et $v = e^{kx}$ : $(uv)' = u'v + uv'$, puis factorise par l'exponentielle.",
       solution: [
-        `u = ${u},\\ u' = ${a} \\qquad v = e^{${kx(k)}},\\ v' = ${k}e^{${kx(k)}}`,
-        `f'(x) = ${a}e^{${kx(k)}} + (${u}) \\times ${k < 0 ? `(${k})` : k}e^{${kx(k)}}`,
+        `u = ${u},\\ u' = ${a} \\qquad v = e^{${kx(k)}},\\ v' = ${coefLead(k)}e^{${kx(k)}}`,
+        `f'(x) = ${coefLead(a)}e^{${kx(k)}} + (${u}) \\times ${k < 0 ? `(${coefLead(k)}e^{${kx(k)}})` : `${coefLead(k)}e^{${kx(k)}}`}`,
         `f'(x) = \\big(${a}${linearTerm(k * a)}${signed(k * b)}\\big)e^{${kx(k)}} = ${ans}`,
       ],
     };

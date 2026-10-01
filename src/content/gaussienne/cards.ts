@@ -29,7 +29,7 @@ export const gaussienneCards: ConceptCard[] = [
     id: "ga-independance",
     section: 2,
     front: "Pour un vecteur gaussien, que signifie une covariance diagonale ?",
-    back: "Les composantes sont indépendantes : la densité se factorise. C'est propre à la gaussienne ; en général, non corrélé n'implique pas indépendant.",
+    back: "Les composantes sont indépendantes : la densité se factorise. C'est propre au vecteur conjointement gaussien : deux gaussiennes non corrélées peuvent être dépendantes ($Y = SX$ avec un signe $S = \\pm 1$ aléatoire). En général, non corrélé n'implique pas indépendant.",
   },
   {
     id: "ga-lineaire-tirage",

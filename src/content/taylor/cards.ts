@@ -17,7 +17,7 @@ export const taylorCards: ConceptCard[] = [
     id: "lagrange-borne",
     section: 2,
     front: "Que dit la formule de Taylor-Lagrange, et à quoi sert-elle concrètement ?",
-    back: "$f(x) = P_n(x) + \\frac{f^{(n+1)}(c)}{(n+1)!}x^{n+1}$ pour un certain $c$ entre 0 et $x$. On ne connaît pas $c$, mais en bornant $f^{(n+1)}$ on borne l'erreur. Pour $e$ : $|e - P_n(1)| \\le \\frac{3}{(n+1)!}$.",
+    back: "Si $f$ est $n+1$ fois dérivable entre 0 et $x$ (et $f^{(n)}$ continue sur le segment) : $f(x) = P_n(x) + \\frac{f^{(n+1)}(c)}{(n+1)!}x^{n+1}$ pour un certain $c$ entre 0 et $x$. On ne connaît pas $c$, mais en bornant $f^{(n+1)}$ on borne l'erreur. Pour $e$ : $|e - P_n(1)| \\le \\frac{3}{(n+1)!}$.",
   },
   {
     id: "rayon-ln",
@@ -41,7 +41,7 @@ export const taylorCards: ConceptCard[] = [
     id: "newton-ordre-2",
     section: 6,
     front: "En quoi la méthode de Newton $x \\leftarrow x - \\frac{f'(x)}{f''(x)}$ est-elle une idée de Taylor ?",
-    back: "Elle remplace $f$ par son développement d'ordre 2 (la parabole osculatrice) et saute au sommet de cette parabole. C'est une descente de gradient dont le pas $\\frac{1}{f''(x)}$ est réglé par la courbure, au lieu d'un $\\eta$ choisi à la main.",
+    back: "Elle remplace $f$ par son développement d'ordre 2 (la parabole osculatrice) et saute au sommet de cette parabole, qui est un minimum seulement si $f''(x) > 0$ (sinon le pas peut monter vers un maximum). C'est une descente de gradient dont le pas $\\frac{1}{f''(x)}$ est réglé par la courbure, au lieu d'un $\\eta$ choisi à la main.",
   },
   {
     id: "parite-sin-cos",

@@ -96,13 +96,15 @@ export function TaylorLesson() {
         </p>
         <Tex block>
           {
-            "\\begin{aligned} e^x &= 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots + \\frac{x^n}{n!} + \\cdots \\\\ \\sin x &= x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\cdots \\\\ \\cos x &= 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots \\\\ \\ln(1+x) &= x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\frac{x^4}{4} + \\cdots \\\\ \\frac{1}{1-x} &= 1 + x + x^2 + x^3 + \\cdots \\end{aligned}"
+            "\\begin{aligned} e^x &= 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots + \\frac{x^n}{n!} + \\cdots && \\text{pour tout } x \\\\ \\sin x &= x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\cdots && \\text{pour tout } x \\\\ \\cos x &= 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots && \\text{pour tout } x \\\\ \\ln(1+x) &= x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\frac{x^4}{4} + \\cdots && \\text{pour } -1 < x \\le 1 \\\\ \\frac{1}{1-x} &= 1 + x + x^2 + x^3 + \\cdots && \\text{pour } |x| < 1 \\end{aligned}"
           }
         </Tex>
         <p>
           Le dernier, tu le connais déjà : c'est la série géométrique du chapitre 7, lue à l'envers. Et le premier
           répond à la promesse du chapitre 7 : la série <Tex>{"\\sum \\frac{x^n}{n!}"}</Tex>, qui converge pour tout{" "}
-          <Tex>x</Tex>, a pour somme <Tex>{"e^x"}</Tex>. Remarque aussi les parités : <Tex>{"\\sin"}</Tex> est impaire et
+          <Tex>x</Tex>, a pour somme <Tex>{"e^x"}</Tex>. Les égalités ne valent que là où la série converge : pour
+          tout <Tex>x</Tex> pour les trois premières, seulement près de 0 pour les deux dernières (la section 4 y
+          revient). Comme polynômes de Taylor, en revanche, les cinq approximations sont valables près de 0. Remarque aussi les parités : <Tex>{"\\sin"}</Tex> est impaire et
           n'a que des puissances impaires, <Tex>{"\\cos"}</Tex> est paire et n'a que des puissances paires.
         </p>
         <p>

@@ -17,7 +17,7 @@ export const esperanceCards: ConceptCard[] = [
     id: "esp-linearite",
     section: 2,
     front: "Linéarité de l'espérance : énoncé, et hypothèse à ne pas oublier ?",
-    back: "$E(X + Y) = E(X) + E(Y)$ et $E(cX) = c\\,E(X)$, sans aucune hypothèse d'indépendance. C'est le produit $E(XY) = E(X)E(Y)$ qui demande l'indépendance.",
+    back: "$E(X + Y) = E(X) + E(Y)$ et $E(cX) = c\\,E(X)$, sans aucune hypothèse d'indépendance (il suffit que $E(X)$ et $E(Y)$ existent). Le produit $E(XY) = E(X)E(Y)$, lui, est faux en général : l'indépendance le garantit, mais il suffit que $X$ et $Y$ soient non corrélées.",
   },
   {
     id: "esp-indicatrices",
@@ -29,7 +29,7 @@ export const esperanceCards: ConceptCard[] = [
     id: "esp-variance",
     section: 3,
     front: "Variance : définition, formule de calcul, et règles pour $cX + b$ et $X + Y$ ?",
-    back: "$V(X) = E((X-\\mu)^2) = E(X^2) - \\mu^2$. $V(cX + b) = c^2 V(X)$. $V(X + Y) = V(X) + V(Y)$ si $X$, $Y$ indépendantes (et $V(X - Y)$ aussi).",
+    back: "$V(X) = E((X-\\mu)^2) = E(X^2) - \\mu^2$. $V(cX + b) = c^2 V(X)$. $V(X + Y) = V(X) + V(Y) + 2(E(XY) - E(X)E(Y))$ : les variances s'ajoutent exactement si $X$, $Y$ sont non corrélées, en particulier si elles sont indépendantes (et $V(X - Y)$ aussi).",
   },
   {
     id: "esp-moments-usuels",

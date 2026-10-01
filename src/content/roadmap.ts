@@ -60,12 +60,8 @@ export const alongside = {
   title: "En parallèle : coder et chercher",
   items: [
     {
-      text: "Finir CS221 : après le chapitre 5, reprends à la vidéo « Apprentissage automatique 9 - Rétropropagation ».",
+      text: "Finir CS221 : toute la partie apprentissage automatique est faite (jusqu'à « Machine Learning 13 - K-means ») ; reprends à « Search 1 - Dynamic Programming, Uniform Cost Search ».",
       afterNode: "derivation",
-    },
-    {
-      text: "Après le chapitre 9 : « Apprentissage automatique 10 - Programmation différentiable ».",
-      afterNode: "gradient",
     },
     {
       text: "Neural Networks: Zero to Hero d'Andrej Karpathy, qui demande Python et les dérivées : faisable dès le chapitre 5.",

@@ -25,7 +25,8 @@ export function LoisContinuesLesson() {
         <p>
           La <strong>fonction de répartition</strong> <Tex>{"F(x) = P(X \\le x)"}</Tex> est l'intégrale de la
           densité, et la densité est sa dérivée (Grinstead et Snell, définition 2.2 et théorème 2.1) :{" "}
-          <Tex>{"F(x) = \\int_{-\\infty}^x f(t)\\, dt"}</Tex> et <Tex>{"F'(x) = f(x)"}</Tex>. Deux lois reviennent
+          <Tex>{"F(x) = \\int_{-\\infty}^x f(t)\\, dt"}</Tex> et <Tex>{"F'(x) = f(x)"}</Tex> en tout point où{" "}
+          <Tex>f</Tex> est continue (théorème fondamental de l'analyse). Deux lois reviennent
           partout (section 5.2) :
         </p>
         <ul>
@@ -96,7 +97,9 @@ export function LoisContinuesLesson() {
         <p>
           <strong>Tirer selon n'importe quelle loi avec un uniforme.</strong> Si <Tex>{"F_X"}</Tex> est strictement
           croissante, <Tex>{"F_X(X)"}</Tex> suit la loi uniforme sur <Tex>{"[0, 1]"}</Tex> (MML, théorème 6.15, la
-          transformation intégrale de probabilité). Dans l'autre sens, si <Tex>U</Tex> est uniforme, alors{" "}
+          transformation intégrale de probabilité). Dans l'autre sens, si <Tex>U</Tex> est uniforme et{" "}
+          <Tex>F</Tex> continue et strictement croissante (sinon on remplace <Tex>{"F^{-1}"}</Tex> par l'inverse
+          généralisée <Tex>{"F^{-1}(u) = \\inf\\{x : F(x) \\ge u\\}"}</Tex>), alors{" "}
           <Tex>{"F^{-1}(U)"}</Tex> suit la loi de fonction de répartition <Tex>F</Tex>, car{" "}
           <Tex>{"P(F^{-1}(U) \\le x) = P(U \\le F(x)) = F(x)"}</Tex>. C'est la version continue du découpage de{" "}
           <Tex>{"[0, 1]"}</Tex> du chapitre 3. Pour l'exponentielle,{" "}

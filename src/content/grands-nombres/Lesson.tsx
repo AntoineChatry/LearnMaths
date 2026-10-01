@@ -58,7 +58,11 @@ for k in (1.5, 2, 3):
           fois plus de tirages.
         </p>
         <p>
-          <strong>L'hypothèse de variance finie compte.</strong> Pour la loi de Cauchy, qui n'a pas d'espérance
+          <strong>Quelle hypothèse compte vraiment ?</strong> La variance finie sert à la preuve par Tchebychev, mais
+          le théorème reste vrai sans elle : il suffit que l'espérance existe, c'est-à-dire{" "}
+          <Tex>{"E(|X|) < \\infty"}</Tex> (Khintchine en 1929, et Kolmogorov en 1930 pour la loi forte). Une variance
+          infinie ralentit seulement la convergence, et l'erreur ne décroît plus en <Tex>{"\\sigma/\\sqrt n"}</Tex>.
+          Ce qui casse tout, c'est l'absence d'espérance. Pour la loi de Cauchy, qui n'a pas d'espérance
           (chapitre 5), la moyenne de <Tex>n</Tex> tirages suit encore exactement la loi de Cauchy, quel que soit{" "}
           <Tex>n</Tex> (exemples 7.6 et 8.8) : moyenner ne sert à rien. Ci-dessous, pour chaque <Tex>n</Tex>, on
           répète 2000 fois la moyenne et on mesure sa dispersion par l'écart interquartile.
@@ -134,7 +138,8 @@ print(round(exact, 4), round(approx, 4))
           type <Tex>{"\\sqrt{p(1-p)/n}"}</Tex> ; il tombe à moins de deux écarts types de <Tex>p</Tex> avec
           probabilité 0,954. D'où l'intervalle de confiance à 95 %{" "}
           <Tex>{"\\hat p \\pm 2\\sqrt{\\hat p(1 - \\hat p)/n}"}</Tex> (Grinstead et Snell, section 9.1). Comme{" "}
-          <Tex>{"p(1-p) \\le 1/4"}</Tex>, une marge de ±3 points est garantie dès <Tex>{"n \\ge 1111"}</Tex>. La marge
+          <Tex>{"p(1-p) \\le 1/4"}</Tex>, une marge de ±3 points est garantie dès <Tex>{"n \\ge 1112"}</Tex> (il faut <Tex>{"1/\\sqrt n \\le 0{,}03"}</Tex>, soit{" "}
+          <Tex>{"n \\ge 1/0{,}03^2 \\approx 1111{,}1"}</Tex>). La marge
           ne décroît qu'en <Tex>{"1/\\sqrt n"}</Tex> : la diviser par 6, pour départager deux modèles à 0,5 point
           d'écart, demande 36 fois plus d'exemples, soit environ 40 000.
         </p>

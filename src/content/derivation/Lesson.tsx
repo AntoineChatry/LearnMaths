@@ -119,7 +119,7 @@ export function DerivationLesson() {
             donne <Tex>{"2(w \\cdot \\phi(x) - y)\\,\\phi(x)"}</Tex>. La vidéo
             suivante de ta playlist, « Apprentissage automatique 9 - Rétropropagation », automatise exactement ça : un
             réseau de neurones est une longue composée de fonctions simples, et sa dérivée est le produit des
-            dérivées locales le long du calcul. Tu arriveras là-bas en connaissant déjà la règle.
+            dérivées locales le long du calcul. C'est cette règle qui fait tourner l'algorithme que tu y as vu.
           </p>
         </div>
       </section>
@@ -362,9 +362,11 @@ for z in [0, 2, 10]:
           confond avec sa tangente, <Tex>{"f(x + d) \\approx f(x) + f'(x)\\,d"}</Tex>. Avec{" "}
           <Tex>{"d = -\\eta f'(x)"}</Tex> :
         </p>
-        <Tex block>{"f\\big(x - \\eta f'(x)\\big) \\approx f(x) - \\eta\\, f'(x)^2 \\leq f(x)"}</Tex>
+        <Tex block>{"f\\big(x - \\eta f'(x)\\big) \\approx \\underbrace{f(x) - \\eta\\, f'(x)^2}_{\\leq\\, f(x)}"}</Tex>
         <p>
-          Le mot important est « près » : l'approximation n'est bonne que si le pas est petit. Sur{" "}
+          L'inégalité porte sur l'approximation, pas sur <Tex>{"f(x - \\eta f'(x))"}</Tex> elle-même. Le mot
+          important est « près » : l'approximation n'est bonne que si le pas est petit, et un pas trop grand peut faire
+          remonter <Tex>f</Tex>. Sur{" "}
           <Tex>{"f(x) = x^2"}</Tex>, on peut tout calculer. <Tex>{"f'(x) = 2x"}</Tex>, donc
         </p>
         <Tex block>{"x_{k+1} = x_k - 2\\eta\\, x_k = (1 - 2\\eta)\\,x_k \\qquad\\Longrightarrow\\qquad x_k = (1 - 2\\eta)^k\\, x_0"}</Tex>

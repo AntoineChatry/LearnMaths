@@ -69,9 +69,12 @@ for i in range(n):
         <span className="section-num">2</span>
         <h2>Le théorème fondamental : dériver une aire</h2>
         <p>
-          Tu connais la fonction <Tex>{"F(x) = \\int_a^x f(t)\\,\\mathrm{d}t"}</Tex> et le résultat de Terminale{" "}
-          <Tex>{"F' = f"}</Tex>. Voici pourquoi c'est vrai. Quand <Tex>x</Tex> avance de <Tex>h</Tex>, l'aire accumulée
-          gagne une bande fine, presque un rectangle de hauteur <Tex>{"f(x)"}</Tex> :
+          Tu connais la fonction <Tex>{"F(x) = \\int_a^x f(t)\\,\\mathrm{d}t"}</Tex> et le résultat de Terminale :
+          si <Tex>f</Tex> est <strong>continue</strong> sur un intervalle, <Tex>{"F' = f"}</Tex>. La continuité
+          compte : pour une fonction en escalier qui saute de 0 à 1 en 0, <Tex>{"F(x) = \\max(x, 0)"}</Tex> a un coin
+          en 0 et n'y est pas dérivable. Voici pourquoi c'est vrai quand <Tex>f</Tex> est continue. Quand <Tex>x</Tex> avance de <Tex>h</Tex>, l'aire accumulée
+          gagne une bande fine, presque un rectangle de hauteur <Tex>{"f(x)"}</Tex> (c'est là que sert la continuité :
+          sur la bande, <Tex>{"f(t)"}</Tex> reste proche de <Tex>{"f(x)"}</Tex>) :
         </p>
         <Tex block>{"\\begin{gathered} F(x+h) - F(x) = \\int_x^{x+h} f(t)\\,\\mathrm{d}t \\approx f(x)\\,h \\\\[1ex] \\Longrightarrow\\quad \\frac{F(x+h)-F(x)}{h} \\xrightarrow[h \\to 0]{} f(x) \\end{gathered}"}</Tex>
         <p>

@@ -27,8 +27,8 @@ function continuityParameter(): Exercise {
       hint: `Chaque morceau est continu. Il reste le raccord en $x = ${x0}$ : la limite à gauche doit valoir $f(${x0})$.`,
       solution: [
         `\\lim_{x \\to ${x0}^-} f(x) = ${al} \\times ${paren(x0)}${signed(be)} = ${leftVal}`,
-        `f(${x0}) = ${x0}k${signed(ga)}`,
-        `${x0}k${signed(ga)} = ${leftVal} \\iff k = \\frac{${leftVal - ga}}{${x0}} = ${k}`,
+        `f(${x0}) = ${coefLead(x0)}k${signed(ga)}`,
+        `${coefLead(x0)}k${signed(ga)} = ${leftVal} \\iff k = \\frac{${leftVal - ga}}{${x0}} = ${k}`,
       ],
     };
   }
@@ -73,7 +73,7 @@ function continuityParameter(): Exercise {
     hint: `$\\frac{e^{${ax}} - 1}{x}$ est le taux de variation de $x \\mapsto e^{${ax}}$ entre 0 et $x$. Sa limite est un nombre dérivé.`,
     solution: [
       `\\frac{e^{${ax}} - 1}{x} = \\frac{g(x) - g(0)}{x - 0} \\quad\\text{avec}\\quad g(x) = e^{${ax}}`,
-      `\\lim_{x \\to 0} \\frac{e^{${ax}} - 1}{x} = g'(0) = ${a}e^{0} = ${a}`,
+      `\\lim_{x \\to 0} \\frac{e^{${ax}} - 1}{x} = g'(0) = ${paren(a)} \\times e^{0} = ${a}`,
       `f \\text{ continue en } 0 \\iff k = ${a}`,
     ],
   };

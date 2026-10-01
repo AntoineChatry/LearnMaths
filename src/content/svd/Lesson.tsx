@@ -165,12 +165,14 @@ print(so[0], so[-1])  # 1.0000000000000009 0.9999999999999987`}</code>
         </p>
         <Tex block>{"A = \\sigma_1 u_1 v_1^\\top + \\sigma_2 u_2 v_2^\\top + \\dots + \\sigma_r u_r v_r^\\top"}</Tex>
         <p>
-          Garder les <Tex>k</Tex> premiers termes donne une matrice <Tex>{"A_k"}</Tex> de rang <Tex>k</Tex>. Le{" "}
-          <strong>théorème d'Eckart-Young</strong> (1936, théorème 4.25 de MML) dit que c'est la meilleure possible :
-          parmi toutes les matrices de rang <Tex>k</Tex>, <Tex>{"A_k"}</Tex> est la plus proche de <Tex>A</Tex>{" "}
-          en norme spectrale, et l'erreur vaut exactement la première valeur singulière oubliée :
+          Garder les <Tex>k</Tex> premiers termes (pour <Tex>{"k < r"}</Tex>) donne une matrice <Tex>{"A_k"}</Tex>{" "}
+          de rang <Tex>k</Tex>. Le <strong>théorème d'Eckart-Young</strong> (théorème 4.25 de MML) dit que c'est la
+          meilleure possible : parmi toutes les matrices de rang au plus <Tex>k</Tex>, <Tex>{"A_k"}</Tex> est la plus
+          proche de <Tex>A</Tex> en norme spectrale, et l'erreur vaut exactement la première valeur singulière
+          oubliée. Historiquement, Eckart et Young l'ont démontré en 1936 pour la norme de Frobenius, et Mirsky en
+          1960 pour la norme spectrale (d'où le nom Eckart-Young-Mirsky) :
         </p>
-        <Tex block>{"\\|A - A_k\\|_2 = \\sigma_{k+1}"}</Tex>
+        <Tex block>{"\\|A - A_k\\|_2 = \\sigma_{k+1} \\qquad\\qquad \\|A - A_k\\|_F = \\sqrt{\\sigma_{k+1}^2 + \\dots + \\sigma_r^2}"}</Tex>
         <p>
           Quand les valeurs singulières chutent brutalement, une matrice énorme se résume à quelques termes. Ici,
           une matrice <Tex>{"200 \\times 100"}</Tex> de rang 5, plus un petit bruit :

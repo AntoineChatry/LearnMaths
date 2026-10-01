@@ -65,11 +65,15 @@ for k in (1, 2, 3):
         </p>
         <GaussViz />
         <p>
-          <strong>Pour une gaussienne, non corrélé veut dire indépendant.</strong> Si <Tex>\Sigma</Tex> est
+          <strong>Pour un vecteur gaussien, non corrélé veut dire indépendant.</strong> Si <Tex>\Sigma</Tex> est
           diagonale, la forme quadratique devient <Tex>{"\\sum_i (x_i - \\mu_i)^2 / \\sigma_i^2"}</Tex>,
           l'exponentielle d'une somme est un produit, et la densité se factorise en un produit de densités
           normales : les composantes sont indépendantes. Le chapitre 6 a montré que c'est faux en général ; c'est une
-          propriété de la gaussienne.
+          propriété de la gaussienne <em>multivariée</em>. Le vecteur doit être gaussien dans son ensemble (on dit{" "}
+          <strong>conjointement</strong> gaussien) : deux variables gaussiennes chacune de leur côté ne suffisent pas.
+          Avec <Tex>{"X \\sim \\mathcal N(0, 1)"}</Tex> et un signe <Tex>{"S = \\pm 1"}</Tex> tiré à pile ou face,
+          indépendant de <Tex>X</Tex>, la variable <Tex>{"Y = SX"}</Tex> est aussi <Tex>{"\\mathcal N(0, 1)"}</Tex>{" "}
+          et <Tex>{"E(XY) = E(S)\\,E(X^2) = 0"}</Tex>. Pourtant <Tex>{"|Y| = |X|"}</Tex> : elles sont dépendantes.
         </p>
       </section>
 

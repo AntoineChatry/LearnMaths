@@ -40,8 +40,8 @@ export const continuiteCards: ConceptCard[] = [
   {
     id: "dichotomie-invariant",
     section: 4,
-    front: "Pourquoi la dichotomie trouve-t-elle toujours une racine d'une fonction continue ?",
-    back: "Elle garde à chaque étape une moitié où $f$ change de signe. Par le TVI, chaque intervalle contient une racine, et sa longueur $\\frac{b-a}{2^n}$ tend vers 0.",
+    front: "Pourquoi la dichotomie trouve-t-elle toujours une racine d'une fonction continue qui change de signe sur $[a, b]$ ?",
+    back: "Il faut partir de $f(a)\\,f(b) < 0$ (sinon, comme $x^2 + 1$ sur $[-1, 1]$, il peut n'y avoir aucune racine). Elle garde ensuite à chaque étape une moitié où $f$ change de signe. Par le TVI, chaque intervalle contient une racine, et sa longueur $\\frac{b-a}{2^n}$ tend vers 0.",
   },
   {
     id: "dichotomie-cout",

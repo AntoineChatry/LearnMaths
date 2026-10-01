@@ -29,7 +29,7 @@ export const seriesCards: ConceptCard[] = [
     id: "serie-integrale",
     section: 4,
     front: "Pourquoi $\\sum \\frac{1}{n^2}$ converge-t-elle, alors que $\\sum \\frac1n$ diverge ?",
-    back: "On compare à l'aire sous la courbe de $\\frac{1}{x^p}$ : les termes sont des rectangles de largeur 1. $\\int_1^{+\\infty} \\frac{dx}{x^2}$ est finie et majore les sommes partielles (croissantes), alors que $\\int_1^{+\\infty} \\frac{dx}{x}$ est infinie et minore la série harmonique. Règle : $\\sum \\frac{1}{n^p}$ converge si et seulement si $p > 1$.",
+    back: "On compare à l'aire sous la courbe de $\\frac{1}{x^p}$ : les termes sont des rectangles de largeur 1. $\\int_1^{+\\infty} \\frac{dx}{x^2} = 1$ est finie et, en ajoutant le premier terme, $1 + \\int_1^{+\\infty} \\frac{dx}{x^2} = 2$ majore les sommes partielles (croissantes), alors que $\\int_1^{+\\infty} \\frac{dx}{x}$ est infinie et minore la série harmonique. Règle : $\\sum \\frac{1}{n^p}$ converge si et seulement si $p > 1$.",
   },
   {
     id: "dalembert-cas-egal-un",
@@ -47,6 +47,6 @@ export const seriesCards: ConceptCard[] = [
     id: "robbins-monro",
     section: 6,
     front: "Pourquoi un pas $\\eta_t = \\frac1t$ vérifie-t-il les conditions de Robbins–Monro, et pas un pas constant ?",
-    back: "Il faut $\\sum \\eta_t = +\\infty$ (pouvoir aller assez loin) et $\\sum \\eta_t^2 < +\\infty$ (le bruit accumulé reste fini). Avec $\\frac1t$ : série harmonique (diverge) et série de Bâle (converge). Avec un pas constant $\\eta$, $\\sum \\eta^2$ est infinie.",
+    back: "Les conditions (suffisantes, pas nécessaires) sont $\\sum \\eta_t = +\\infty$ (pouvoir aller assez loin) et $\\sum \\eta_t^2 < +\\infty$ (le bruit accumulé reste fini). Avec $\\frac1t$ : série harmonique (diverge) et série de Bâle (converge). Avec un pas constant $\\eta$, $\\sum \\eta^2$ est infinie.",
   },
 ];

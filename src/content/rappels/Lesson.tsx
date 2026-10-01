@@ -131,12 +131,15 @@ print(2 * x * math.exp(x**2))   # 2.28524270793753`}</code>
         </p>
         <Tex block>
           {
-            "\\begin{array}{c|c} f(x) & F(x) \\\\ \\hline x^n\\ (n \\neq -1) & \\frac{x^{n+1}}{n+1} \\\\[0.6ex] \\cos(\\omega x + \\varphi) & \\frac{1}{\\omega}\\sin(\\omega x + \\varphi) \\\\[0.6ex] \\sin(\\omega x + \\varphi) & -\\frac{1}{\\omega}\\cos(\\omega x + \\varphi) \\\\[0.6ex] e^{kx} & \\frac{1}{k}e^{kx} \\\\[0.6ex] u'(x)\\,e^{u(x)} & e^{u(x)} \\end{array}"
+            "\\begin{array}{c|c} f(x) & F(x) \\\\ \\hline x^n\\ (n \\neq -1) & \\frac{x^{n+1}}{n+1} \\\\[0.6ex] \\cos(\\omega x + \\varphi)\\ (\\omega \\neq 0) & \\frac{1}{\\omega}\\sin(\\omega x + \\varphi) \\\\[0.6ex] \\sin(\\omega x + \\varphi)\\ (\\omega \\neq 0) & -\\frac{1}{\\omega}\\cos(\\omega x + \\varphi) \\\\[0.6ex] e^{kx}\\ (k \\neq 0) & \\frac{1}{k}e^{kx} \\\\[0.6ex] u'(x)\\,e^{u(x)} & e^{u(x)} \\end{array}"
           }
         </Tex>
         <p>
-          Une fonction a une infinité de primitives : si <Tex>F</Tex> en est une, <Tex>{"F + C"}</Tex> aussi, car la
-          dérivée d'une constante est nulle. Une condition du type <Tex>{"F(0) = 0"}</Tex> fixe <Tex>C</Tex>. Piège
+          Ces primitives valent sur un intervalle où <Tex>f</Tex> est définie : pour <Tex>{"n < 0"}</Tex>,{" "}
+          <Tex>{"x^n"}</Tex> n'est pas définie en 0, donc on travaille sur <Tex>{"]0, +\\infty["}</Tex> ou{" "}
+          <Tex>{"]-\\infty, 0["}</Tex>. Sur un intervalle, une fonction a une infinité de primitives : si{" "}
+          <Tex>F</Tex> en est une, <Tex>{"F + C"}</Tex> aussi, car la dérivée d'une constante est nulle, et ce sont
+          les seules. Une condition du type <Tex>{"F(0) = 0"}</Tex> fixe <Tex>C</Tex>. Piège
           classique : la primitive de <Tex>{"e^{3x}"}</Tex> qui s'annule en 0 n'est pas{" "}
           <Tex>{"\\frac{1}{3}e^{3x}"}</Tex> (qui vaut <Tex>{"\\frac13"}</Tex> en 0), mais{" "}
           <Tex>{"\\frac{1}{3}e^{3x} - \\frac{1}{3}"}</Tex>.
@@ -167,7 +170,9 @@ print(2 * x * math.exp(x**2))   # 2.28524270793753`}</code>
           }
         </Tex>
         <p>
-          Pour résoudre une équation, on applique la réciproque des deux côtés. Pour <Tex>{"c > 0"}</Tex> :
+          Pour résoudre une équation, on applique la réciproque des deux côtés. La première demande{" "}
+          <Tex>{"c > 0"}</Tex> (une exponentielle est toujours positive : sinon, aucune solution) ; la seconde vaut pour
+          tout réel <Tex>c</Tex>, et <Tex>{"e^c > 0"}</Tex> garantit que <Tex>{"\\ln(ax + b)"}</Tex> est défini :
         </p>
         <Tex block>
           {"e^{ax + b} = c \\iff ax + b = \\ln c \\qquad\\qquad \\ln(ax + b) = c \\iff ax + b = e^c"}

@@ -181,8 +181,10 @@ autre = w + 5 * np.array([2.0, -1.0, 0.0])
 print(np.allclose(X @ w, X @ autre))  # True : mêmes prédictions`}</code>
         </pre>
         <p>
-          Les arrondis ont rendu <Tex>{"X^\\top X"}</Tex> « presque » inversible, et <code>solve</code> a rendu une
-          solution parmi une infinité, choisie par le bruit numérique. Les poids individuels n'ont alors aucun sens :
+          Ici <Tex>{"X^\\top X"}</Tex> est calculée sans erreur (des entiers) et elle est exactement singulière. Ce
+          sont les arrondis de l'élimination menée par <code>solve</code> qui laissent un pivot minuscule (environ{" "}
+          <Tex>{"10^{-12}"}</Tex>) au lieu de 0 : la matrice paraît « presque » inversible, et <code>solve</code> rend
+          une solution parmi une infinité, choisie par le bruit numérique. Les poids individuels n'ont alors aucun sens :
           seule la combinaison <Tex>{"w_1 + 2w_2"}</Tex> est déterminée par les données.
         </p>
         <p>

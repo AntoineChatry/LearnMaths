@@ -143,7 +143,7 @@ function pcaVariance(): Exercise {
   const given = `N = ${N} \\qquad \\sigma = ${s.join(",\\ ")}`;
   if (kind === 0) {
     return {
-      intro: "$X$ contient $N$ points centrés (un par ligne), et voici ses valeurs singulières. Donne la variance des données le long de la première composante principale.",
+      intro: "$X$ contient $N$ points centrés (un par ligne), et voici ses valeurs singulières. Donne la variance des données le long de la première composante principale, avec la convention $\\frac1N$ de la leçon ($S = X^\\top X / N$).",
       promptTex: given,
       answerTex: fracTex(sq[0], N),
       hint: "Les variances le long des composantes principales sont les valeurs propres de $S = X^\\top X / N$, soit $\\sigma_i^2 / N$.",

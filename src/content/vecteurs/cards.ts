@@ -35,7 +35,7 @@ export const vecteursCards: ConceptCard[] = [
     id: "cauchy-schwarz-preuve",
     section: 6,
     front: "Quelle est l'idée de la preuve de Cauchy-Schwarz, $|a \\cdot b| \\le \\|a\\|\\,\\|b\\|$ ?",
-    back: "$t \\mapsto \\|a + t\\,b\\|^2 = \\|b\\|^2 t^2 + 2(a \\cdot b)\\,t + \\|a\\|^2$ est un trinôme jamais négatif. Son discriminant est donc $\\le 0$ : $4(a \\cdot b)^2 - 4\\|a\\|^2\\|b\\|^2 \\le 0$.",
+    back: "Si $b = 0$, les deux membres sont nuls. Sinon, $t \\mapsto \\|a + t\\,b\\|^2 = \\|b\\|^2 t^2 + 2(a \\cdot b)\\,t + \\|a\\|^2$ est un trinôme jamais négatif. Son discriminant est donc $\\le 0$ : $4(a \\cdot b)^2 - 4\\|a\\|^2\\|b\\|^2 \\le 0$.",
   },
   {
     id: "similarite-cosinus",

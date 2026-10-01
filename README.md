@@ -59,7 +59,17 @@ Chapitres rédigés, déclarés dans `src/content/curriculum.ts` :
 8. Loi des grands nombres et théorème central limite
 9. Maximum de vraisemblance et estimation bayésienne
 
-Les trois modules sont complets. Les étapes suivantes (multivariable et optimisation, théorie de l'information) figurent seulement dans le parcours de la page d'accueil.
+**Calcul multivariable et optimisation**
+1. Fonctions vectorielles et jacobienne
+2. Règle de la chaîne et gradients matriciels
+3. Rétropropagation et différentiation automatique
+4. Taylor d'ordre 2 et méthode de Newton
+5. Momentum, SGD et Adam
+6. Convexité
+7. Multiplicateurs de Lagrange
+8. Conditions KKT et dualité
+
+Les quatre modules sont complets. La théorie de l'information figure seulement dans le parcours de la page d'accueil.
 
 ## Installation et lancement
 
@@ -114,8 +124,9 @@ Références citées dans les leçons :
 - J. K. Blitzstein, J. Hwang, *Introduction to Probability*
 - C. M. Bishop, *Pattern Recognition and Machine Learning* (« PRML »)
 - I. Goodfellow, Y. Bengio, A. Courville, *Deep Learning*
+- S. Boyd, L. Vandenberghe, *Convex Optimization*, https://web.stanford.edu/~boyd/cvxbook/
 - C. D. Manning, P. Raghavan, H. Schütze, *Introduction to Information Retrieval*
 - Gilbert Strang (MIT 18.06) et Khan Academy, cités ponctuellement
-- Articles, avec section ou équation citée : Glorot et Bengio (2010), He et al. (2015), Hinton, Vinyals et Dean (2015), Kingma et Welling (2014), Radford et al. (GPT-2, 2019), Ho, Jain et Abbeel (DDPM, 2020), McCandlish et al. (2018)
+- Articles, avec section ou équation citée : Glorot et Bengio (2010), He et al. (2015), Hinton, Vinyals et Dean (2015), Kingma et Welling (2014), Radford et al. (GPT-2, 2019), Ho, Jain et Abbeel (DDPM, 2020), McCandlish et al. (2018), Pearlmutter (1994), Dauphin et al. (2014), Goh (Distill, 2017), Kingma et Ba (Adam, 2015), Loshchilov et Hutter (AdamW, 2019)
 
 Le parcours (`roadmap.ts`) renvoie en plus vers 3Blue1Brown, Harvard Stat 110, Boyd et Vandenberghe (*Convex Optimization*) et MacKay (*Information Theory, Inference, and Learning Algorithms*).

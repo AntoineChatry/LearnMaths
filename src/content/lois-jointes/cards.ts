@@ -11,7 +11,7 @@ export const loisJointesCards: ConceptCard[] = [
     id: "lj-confusion",
     section: 1,
     front: "Dans une matrice de confusion vue comme loi jointe (prédit, vrai), que sont la précision et le rappel ?",
-    back: "Précision : $P(\\text{vrai positif} \\mid \\text{prédit positif})$. Rappel : $P(\\text{prédit positif} \\mid \\text{vrai positif})$. Deux conditionnelles de la même case, divisée par deux marginales différentes.",
+    back: "Précision : $P(\\text{réellement positif} \\mid \\text{prédit positif})$. Rappel : $P(\\text{prédit positif} \\mid \\text{réellement positif})$. Deux conditionnelles de la même case, divisée par deux marginales différentes.",
   },
   {
     id: "lj-covariance",

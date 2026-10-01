@@ -398,6 +398,10 @@ kbd {
   font-size: 0.95rem;
   font-variant-numeric: tabular-nums;
   margin: 1rem 0;
+  /* Scroll inside the table on narrow screens instead of widening the page. */
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .value-table th,
@@ -865,6 +869,81 @@ kbd {
   border-radius: 0.15em;
   margin: 0 0.25em 0 0.6em;
   vertical-align: -0.05em;
+}
+
+/* Computation graph: forward values, then backward gradients. */
+.graph-viz {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0.5rem auto;
+}
+
+.graph-node circle {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.graph-node-current circle {
+  fill: var(--highlight);
+}
+
+.graph-op,
+.graph-name {
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: var(--text);
+  font-family: var(--sans);
+}
+
+.graph-op {
+  font-size: 17px;
+}
+
+.graph-name {
+  font-size: 19px;
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+.graph-edge {
+  stroke: var(--ink-soft);
+  stroke-width: 2;
+}
+
+.graph-edge-fwd {
+  stroke: var(--ink);
+  stroke-width: 3.5;
+}
+
+.graph-edge-bwd {
+  stroke: var(--margin);
+  stroke-width: 3.5;
+}
+
+.graph-arrow-head {
+  fill: var(--ink-soft);
+}
+
+.graph-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.graph-table {
+  margin: 0 0 0.5rem;
+}
+
+.graph-table th,
+.graph-table td {
+  white-space: nowrap;
+  padding: 0.3rem 0.6rem;
+}
+
+.graph-row-current td {
+  background: color-mix(in srgb, var(--highlight) 45%, var(--paper));
 }
 
 /* Next-token law: bars, and the cumulative distribution function as segments of [0, 1]. */

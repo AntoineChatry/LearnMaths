@@ -11,7 +11,7 @@ export const gradientCards: ConceptCard[] = [
     id: "derivee-directionnelle-produit-scalaire",
     section: 3,
     front: "Pourquoi la dérivée de $f$ dans la direction unitaire $u$ vaut-elle $\\nabla f \\cdot u$ ?",
-    back: "Pour un petit pas $h$, $f(x + h u_1, y + h u_2) \\approx f(x, y) + h\\,\\frac{\\partial f}{\\partial x} u_1 + h\\,\\frac{\\partial f}{\\partial y} u_2$ : chaque variable contribue avec sa pente. Le coefficient de $h$ est exactement le produit scalaire $\\nabla f \\cdot u$.",
+    back: "Pour un petit pas $h$, $f(x + h u_1, y + h u_2) \\approx f(x, y) + h\\,\\frac{\\partial f}{\\partial x} u_1 + h\\,\\frac{\\partial f}{\\partial y} u_2$ : chaque variable contribue avec sa pente. Le coefficient de $h$ est exactement le produit scalaire $\\nabla f \\cdot u$. Hypothèse : $f$ différentiable au point (par exemple dérivées partielles continues) ; avoir des dérivées partielles ne suffit pas.",
   },
   {
     id: "gradient-plus-forte-pente",

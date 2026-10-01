@@ -84,8 +84,8 @@ const BASE: Record<Kind, string> = {
   exp: "e^u = 1 + u + \\frac{u^2}{2!} + \\frac{u^3}{3!} + \\cdots",
   sin: "\\sin u = u - \\frac{u^3}{3!} + \\frac{u^5}{5!} - \\cdots",
   cos: "\\cos u = 1 - \\frac{u^2}{2!} + \\frac{u^4}{4!} - \\cdots",
-  ln: "\\ln(1+u) = u - \\frac{u^2}{2} + \\frac{u^3}{3} - \\cdots",
-  geo: "\\frac{1}{1-u} = 1 + u + u^2 + u^3 + \\cdots",
+  ln: "\\ln(1+u) = u - \\frac{u^2}{2} + \\frac{u^3}{3} - \\cdots \\quad (-1 < u \\le 1)",
+  geo: "\\frac{1}{1-u} = 1 + u + u^2 + u^3 + \\cdots \\quad (|u| < 1)",
 };
 const uTex = (a: number) => (a === 1 ? "x" : a === -1 ? "-x" : `${a}x`);
 

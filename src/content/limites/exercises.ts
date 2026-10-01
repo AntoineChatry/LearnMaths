@@ -44,10 +44,10 @@ function infinityRational(): Exercise {
     conclusion = `\\text{Même degré : } \\frac{${p}}{${q}} = ${answerTex}`;
   } else if (m < n) {
     answerTex = "0";
-    conclusion = `\\frac{${p}${xPow(m)}}{${q}${xPow(n)}} = \\frac{${p}}{${q}\\,${xPow(n - m)}} \\to 0`;
+    conclusion = `\\frac{${coefLead(p)}${xPow(m)}}{${coefLead(q)}${xPow(n)}} = \\frac{${p}}{${coefLead(q)}${xPow(n - m)}} \\to 0`;
   } else {
     answerTex = p / q > 0 ? "+\\infty" : "-\\infty";
-    conclusion = `\\frac{${p}${xPow(m)}}{${q}${xPow(n)}} = \\frac{${p}}{${q}}\\,${xPow(m - n)} \\to ${answerTex} \\text{ (signe de } \\tfrac{${p}}{${q}}\\text{)}`;
+    conclusion = `\\frac{${coefLead(p)}${xPow(m)}}{${coefLead(q)}${xPow(n)}} = \\frac{${p}}{${q}}\\,${xPow(m - n)} \\to ${answerTex} \\text{ (signe de } \\tfrac{${p}}{${q}}\\text{)}`;
   }
   return {
     promptTex: `\\lim_{x \\to +\\infty} \\frac{${num}}{${den}}`,

@@ -23,7 +23,7 @@ export const systemesCards: ConceptCard[] = [
     id: "variable-libre",
     section: 3,
     front: "Que se passe-t-il quand une ligne s'élimine entièrement en $0 = d$ ?",
-    back: "Si $d \\ne 0$, aucune solution. Si $d = 0$, l'équation ne contraint rien : une inconnue sans pivot devient libre, et il y a une infinité de solutions, une solution particulière plus un élément du noyau.",
+    back: "Si $d \\ne 0$, aucune solution. Si $d = 0$, l'équation ne contraint rien et on l'efface. On compte ensuite les pivots restants : s'il y en a moins que d'inconnues, une inconnue sans pivot devient libre et il y a une infinité de solutions (une solution particulière plus un élément du noyau) ; sinon la solution est unique (ex. : $x + y = 1$, $x - y = 0$, $2x = 1$).",
   },
   {
     id: "lu-sens",

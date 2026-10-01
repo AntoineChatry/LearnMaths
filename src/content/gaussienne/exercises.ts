@@ -26,17 +26,31 @@ function standardization(): Exercise {
       promptTex: `${given} \\qquad z = ${fracTex(p, q)}`,
       answerTex: fracTex(mu * q + p * sigma, q),
       hint: "$x = \\mu + z\\sigma$, avec $\\sigma$ la racine de la variance.",
-      solution: [`x = ${mu} + ${fracTex(p, q)} \\times ${sigma} = ${fracTex(mu * q + p * sigma, q)}`],
+      solution: [`x = ${mu} + ${p < 0 ? `\\left(${fracTex(p, q)}\\right)` : fracTex(p, q)} \\times ${sigma} = ${fracTex(mu * q + p * sigma, q)}`],
     };
   }
-  const a = randInt(1, 3) * sigma;
-  const [pn, pd] = pick([[3, 4], [4, 5], [7, 8], [9, 10], [5, 6], [2, 3]] as [number, number][]);
+  // a = k sigma, so the given value must be Phi(k): Phi(1), Phi(2), Phi(3) to 5 decimals, in units of 1e-5.
+  const k = randInt(1, 3);
+  const a = k * sigma;
+  const phi = [84134, 97725, 99865][k - 1];
+  const dec = (units: number) => `0{,}${String(units).padStart(5, "0").replace(/0+$/, "")}`;
+  if (Math.random() < 0.5) {
+    const tail = 100000 - phi;
+    return {
+      intro: "On connaît une probabilité à droite de la moyenne. Par symétrie de la gaussienne, donne celle demandée.",
+      promptTex: `${given} \\qquad P(X \\le ${mu + a}) = ${dec(phi)} \\qquad P(X \\le ${mu - a}) = \\ ?`,
+      answerTex: dec(tail),
+      hint: "La densité est symétrique autour de $\\mu$ : $P(X \\le \\mu - a) = P(X \\ge \\mu + a) = 1 - P(X \\le \\mu + a)$.",
+      solution: [`${mu - a} = \\mu - ${a},\\ \\text{symétrique de } ${mu + a} \\qquad P(X \\le ${mu - a}) = 1 - ${dec(phi)} = ${dec(tail)}`],
+    };
+  }
+  const inside = 2 * phi - 100000;
   return {
-    intro: "On connaît une probabilité à droite de la moyenne. Par symétrie de la gaussienne, donne celle demandée.",
-    promptTex: `${given} \\qquad P(X \\le ${mu + a}) = ${fracTex(pn, pd)} \\qquad P(X \\le ${mu - a}) = \\ ?`,
-    answerTex: fracTex(pd - pn, pd),
-    hint: "La densité est symétrique autour de $\\mu$ : $P(X \\le \\mu - a) = P(X \\ge \\mu + a) = 1 - P(X \\le \\mu + a)$.",
-    solution: [`P(X \\le ${mu - a}) = 1 - ${fracTex(pn, pd)} = ${fracTex(pd - pn, pd)}`],
+    intro: "On connaît une probabilité à droite de la moyenne. Par symétrie de la gaussienne, donne la probabilité de l'intervalle centré.",
+    promptTex: `${given} \\qquad P(X \\le ${mu + a}) = ${dec(phi)} \\qquad P(${mu - a} \\le X \\le ${mu + a}) = \\ ?`,
+    answerTex: dec(inside),
+    hint: "Par symétrie, $P(X \\le \\mu - a) = 1 - P(X \\le \\mu + a)$ ; retire cette queue de $P(X \\le \\mu + a)$.",
+    solution: [`P(X \\le ${mu - a}) = 1 - ${dec(phi)} = ${dec(100000 - phi)}`, `P(${mu - a} \\le X \\le ${mu + a}) = ${dec(phi)} - ${dec(100000 - phi)} = ${dec(inside)}`],
   };
 }
 

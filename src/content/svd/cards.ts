@@ -5,13 +5,13 @@ export const svdCards: ConceptCard[] = [
     id: "svd-geometrie",
     section: 1,
     front: "Que dit la SVD $A = U\\Sigma V^\\top$, géométriquement ?",
-    back: "Toute matrice est une transformation orthogonale ($V^\\top$), puis un étirement de chaque axe par les valeurs singulières $\\sigma_i \\ge 0$, puis une autre transformation orthogonale ($U$). Le cercle unité devient une ellipse de demi-axes $\\sigma_i$, et $Av_i = \\sigma_i u_i$.",
+    back: "Toute matrice est une transformation orthogonale ($V^\\top$), puis un étirement de chaque axe par les valeurs singulières $\\sigma_i \\ge 0$, puis une autre transformation orthogonale ($U$). Le cercle unité devient une ellipse de demi-axes $\\sigma_i$ (aplatie si un $\\sigma_i$ est nul), et $Av_i = \\sigma_i u_i$.",
   },
   {
     id: "svd-calcul",
     section: 2,
     front: "Comment obtient-on les valeurs singulières de $A$ ?",
-    back: "Ce sont les racines carrées des valeurs propres de $A^\\top A$ (symétrique, semi-définie positive). Les $v_i$ sont ses vecteurs propres, et $u_i = Av_i / \\sigma_i$.",
+    back: "Ce sont les racines carrées des valeurs propres de $A^\\top A$ (symétrique, semi-définie positive). Les $v_i$ sont ses vecteurs propres, et $u_i = Av_i / \\sigma_i$ quand $\\sigma_i > 0$.",
   },
   {
     id: "svd-lecture",
@@ -29,7 +29,7 @@ export const svdCards: ConceptCard[] = [
     id: "svd-eckart-young",
     section: 4,
     front: "Que dit le théorème d'Eckart-Young ?",
-    back: "La SVD tronquée $A_k = \\sum_{i \\le k} \\sigma_i u_i v_i^\\top$ est la meilleure approximation de rang $k$ de $A$ (en norme spectrale), et l'erreur vaut $\\|A - A_k\\|_2 = \\sigma_{k+1}$.",
+    back: "La SVD tronquée $A_k = \\sum_{i \\le k} \\sigma_i u_i v_i^\\top$ est la meilleure approximation de $A$ parmi les matrices de rang au plus $k$ (en norme spectrale comme en norme de Frobenius), et l'erreur vaut $\\|A - A_k\\|_2 = \\sigma_{k+1}$.",
   },
   {
     id: "svd-lora",

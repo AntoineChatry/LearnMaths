@@ -41,7 +41,7 @@ export const determinantCards: ConceptCard[] = [
     id: "inverse-produit",
     section: 4,
     front: "Que valent $(AB)^{-1}$ et $\\det(A^{-1})$ ?",
-    back: "$(AB)^{-1} = B^{-1}A^{-1}$ (pour défaire « $B$ puis $A$ », on défait $A$ d'abord), et $\\det(A^{-1}) = 1 / \\det(A)$.",
+    back: "Pour $A$, $B$ carrées inversibles : $(AB)^{-1} = B^{-1}A^{-1}$ (pour défaire « $B$ puis $A$ », on défait $A$ d'abord), et $\\det(A^{-1}) = 1 / \\det(A)$.",
   },
   {
     id: "det-flows",

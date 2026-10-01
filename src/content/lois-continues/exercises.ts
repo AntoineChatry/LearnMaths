@@ -136,7 +136,7 @@ function moments(): Exercise {
       promptTex: given,
       answerTex: fracTex(k + 1, k + 2),
       hint: "$E(X) = \\int_0^1 x\\,f(x)\\,dx$.",
-      solution: [`\\int_0^1 ${k + 1}x^{${k + 1}}\\,dx = ${fracTex(k + 1, k + 2)}`],
+      solution: [`\\int_0^1 ${k === 0 ? "x" : `${k + 1}x^{${k + 1}}`}\\,dx = ${fracTex(k + 1, k + 2)}`],
     };
   if (kind === 1)
     return {
@@ -144,7 +144,7 @@ function moments(): Exercise {
       promptTex: given,
       answerTex: fracTex(k + 1, k + 3),
       hint: "$E(X^2) = \\int_0^1 x^2 f(x)\\,dx$.",
-      solution: [`\\int_0^1 ${k + 1}x^{${k + 2}}\\,dx = ${fracTex(k + 1, k + 3)}`],
+      solution: [`\\int_0^1 ${k === 0 ? "" : k + 1}x^{${k + 2}}\\,dx = ${fracTex(k + 1, k + 3)}`],
     };
   // V = (k+1)/(k+3) - (k+1)²/(k+2)² = (k+1) / ((k+3)(k+2)²)
   const vDen = (k + 3) * (k + 2) ** 2;
@@ -218,7 +218,7 @@ function changeOfVariable(): Exercise {
     promptTex: `\\lambda = ${lambda} \\qquad u = ${fracTex(a, b)}`,
     answerTex: ans,
     hint: "Résous $1 - e^{-\\lambda x} = u$ : $x = -\\ln(1 - u)/\\lambda = \\ln\\frac{1}{1-u} / \\lambda$.",
-    solution: [`e^{-${lambda}x} = 1 - ${fracTex(a, b)} = \\frac{1}{${c}}`, `x = ${ans}`],
+    solution: [`e^{-${lambda === 1 ? "" : lambda}x} = 1 - ${fracTex(a, b)} = \\frac{1}{${c}}`, `x = ${ans}`],
   };
 }
 

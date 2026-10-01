@@ -29,7 +29,7 @@ export const limitesCards: ConceptCard[] = [
     id: "hierarchie-croissance",
     section: 3,
     front: "Range en $+\\infty$, du plus lent au plus rapide : $e^x$, $\\ln x$, $x^k$.",
-    back: "$\\ln x \\ll x^k \\ll e^x$ : une exponentielle finit toujours par écraser une puissance, qui écrase toujours le logarithme.",
+    back: "$\\ln x \\ll x^k \\ll e^x$ pour tout $k > 0$ : une exponentielle finit toujours par écraser une puissance, qui écrase toujours le logarithme.",
   },
   {
     id: "sigmoide-saturation",

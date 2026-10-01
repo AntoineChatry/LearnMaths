@@ -61,8 +61,10 @@ export function DeterminantLesson() {
         </ul>
         <p>
           Avec <Tex>{"\\det(I) = 1"}</Tex>, on en déduit tout le reste. Une matrice <strong>triangulaire</strong> a
-          pour déterminant le produit de sa diagonale : en retranchant des multiples de lignes, on efface ce qui est
-          au-dessus de la diagonale sans changer le déterminant, et il reste une matrice diagonale.
+          pour déterminant le produit de sa diagonale. Si la diagonale n'a pas de zéro, en retranchant des multiples
+          de lignes (en remontant depuis la dernière), on efface ce qui est au-dessus de la diagonale sans changer le
+          déterminant, et il reste une matrice diagonale. Si un coefficient diagonal est nul, les lignes sont liées :
+          le déterminant vaut 0, qui est encore le produit de la diagonale.
         </p>
         <Tex block>{"\\det \\begin{pmatrix} 2 & 5 & -1 \\\\ 0 & 3 & 4 \\\\ 0 & 0 & -2 \\end{pmatrix} = 2 \\times 3 \\times (-2) = -12"}</Tex>
         <p>

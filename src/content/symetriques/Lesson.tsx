@@ -236,7 +236,9 @@ for x in [1, -1]:
         <h2>Covariance et gaussiennes</h2>
         <p>
           Une gaussienne en dimension <Tex>n</Tex> a une moyenne <Tex>{"\\mu"}</Tex> et une matrice de covariance{" "}
-          <Tex>{"\\Sigma"}</Tex>, symétrique et semi-définie positive (section 3). Sa densité fait intervenir la
+          <Tex>{"\\Sigma"}</Tex>, symétrique et semi-définie positive (section 3). Pour avoir une densité, il faut{" "}
+          <Tex>{"\\Sigma"}</Tex> <strong>définie positive</strong>, donc inversible : si une valeur propre est nulle,
+          la loi est écrasée sur un sous-espace et n'a pas de densité. Cette densité fait intervenir la
           forme quadratique <Tex>{"(x - \\mu)^\\top \\Sigma^{-1} (x - \\mu)"}</Tex> : ses courbes de niveau sont les
           ellipses de la section 2, avec les vecteurs propres de <Tex>{"\\Sigma"}</Tex> comme axes. Le module
           Probabilités y reviendra.

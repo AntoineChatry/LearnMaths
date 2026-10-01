@@ -92,7 +92,7 @@ function definiteIntegral(): Exercise {
       hint: "Une primitive de $e^{mx}$ est $\\frac{1}{m}e^{mx}$ (c'est $u'e^u$ à une constante près).",
       solution: [
         `F(x) = ${cf(fracTex(k, m))}e^{${mx}}`,
-        `F(${b}) - F(0) = ${cf(fracTex(k, m))}${expTex(m * b)} - ${par(`${cf(fracTex(k, m))}e^{0}`)} = ${answerTex}`,
+        `F(${b}) - F(0) = ${cf(fracTex(k, m))}${expTex(m * b)} - ${par(fracTex(k, m))} = ${answerTex} \\quad (e^{0} = 1)`,
       ],
     };
   }

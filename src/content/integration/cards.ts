@@ -16,8 +16,8 @@ export const integrationCards: ConceptCard[] = [
   {
     id: "tfa-intuition",
     section: 2,
-    front: "Pourquoi la dérivée de $F(x) = \\int_a^x f(t)\\,\\mathrm{d}t$ est-elle $f(x)$ ?",
-    back: "Quand $x$ avance de $h$, l'aire accumulée gagne une bande fine, presque un rectangle d'aire $f(x)\\,h$. Donc $\\frac{F(x+h) - F(x)}{h} \\to f(x)$ : l'aire grandit à la vitesse de la hauteur de la courbe.",
+    front: "Pourquoi la dérivée de $F(x) = \\int_a^x f(t)\\,\\mathrm{d}t$ est-elle $f(x)$, et sous quelle hypothèse ?",
+    back: "Si $f$ est continue : quand $x$ avance de $h$, l'aire accumulée gagne une bande fine, presque un rectangle d'aire $f(x)\\,h$ (sur la bande, $f$ reste proche de $f(x)$). Donc $\\frac{F(x+h) - F(x)}{h} \\to f(x)$. Sans continuité, c'est faux : pour un saut de 0 à 1 en 0, $F(x) = \\max(x, 0)$ n'est pas dérivable en 0.",
   },
   {
     id: "primitive-constante",

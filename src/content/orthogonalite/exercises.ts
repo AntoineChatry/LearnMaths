@@ -75,7 +75,7 @@ function gramSchmidt(): Exercise {
     hint: "$u_2 = b_2 - \\dfrac{u_1 \\cdot b_2}{u_1 \\cdot u_1}\\, u_1$.",
     solution: [
       `u_1 \\cdot b_2 = ${n}, \\quad u_1 \\cdot u_1 = ${d}`,
-      `u_2 = ${vec(b2)} - ${fracTex(n, d)}\\, ${vec(b1)}, \\quad \\text{composante } ${i + 1} : ${p(b2[i])} - ${fracTex(n, d)} \\times ${p(b1[i])} = ${answerTex}`,
+      `u_2 = ${vec(b2)} - ${n < 0 ? `\\left(${fracTex(n, d)}\\right)` : fracTex(n, d)}\\, ${vec(b1)}, \\quad \\text{composante } ${i + 1} : ${p(b2[i])} - ${n < 0 ? `\\left(${fracTex(n, d)}\\right)` : fracTex(n, d)} \\times ${p(b1[i])} = ${answerTex}`,
     ],
   };
 }

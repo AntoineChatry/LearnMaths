@@ -8,7 +8,9 @@ function mleSimple(): Exercise {
   const kind = randInt(0, 2);
   if (kind === 0) {
     const n = randInt(4, 30);
-    const k = randInt(0, n);
+    // 0 < k < n: for k = 0 or n the likelihood is monotonic, the derivative never vanishes
+    // and the maximum sits on the boundary θ = 0 or 1, which the solution below would not describe.
+    const k = randInt(1, n - 1);
     return {
       intro: "On observe $k$ succès sur $n$ essais indépendants de probabilité inconnue $\\theta$. Donne l'estimateur du maximum de vraisemblance $\\hat\\theta$.",
       promptTex: `n = ${n} \\qquad k = ${k}`,
@@ -20,6 +22,8 @@ function mleSimple(): Exercise {
   const N = randInt(3, 6);
   if (kind === 1) {
     const xs = Array.from({ length: N }, () => randInt(0, 8));
+    // All-zero counts: e^{-Nλ} has no maximum on λ > 0, the MLE does not exist.
+    if (sum(xs) === 0) return mleSimple();
     return {
       intro: "Des comptes indépendants suivent une loi de Poisson de paramètre $\\lambda$ inconnu. Donne l'estimateur du maximum de vraisemblance $\\hat\\lambda$.",
       promptTex: `x = (${xs.join(",\\ ")})`,
@@ -45,6 +49,8 @@ function mleGaussian(): Exercise {
   const s = sum(xs);
   // sum of squared deviations = sum x² - s²/N = (N sum x² - s²) / N
   const ssNum = N * sum(xs.map((x) => x * x)) - s * s;
+  // Identical data: the likelihood grows without bound as σ² → 0, the variance MLE degenerates.
+  if (ssNum === 0) return mleGaussian();
   const data = `x = (${xs.join(",\\ ")})`;
   const kind = randInt(0, 2);
   if (kind === 0)
