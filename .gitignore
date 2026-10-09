@@ -35,3 +35,13 @@ __pycache__/
 .venv/
 .claude/
 .serena/
+
+# Source documents (PDF, extracted text): local only, listed in sources/README.md
+/sources/*
+!/sources/README.md
+
+# Generated test bundles (rebuilt by rolldown, see verif/README.md)
+/verif/bancs/bundle_*.mjs
+
+# Generic bench report (rewritten by t_all.mjs)
+/verif/bancs/rapport_all.*
