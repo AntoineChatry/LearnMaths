@@ -53,6 +53,27 @@ export const roadmap: RoadmapStep[] = [
     why: "La perte d'entraînement des LLM est une entropie croisée.",
     resources: [{ label: "MacKay, Information Theory, Inference, and Learning Algorithms (PDF gratuit)", url: "https://www.inference.org.uk/mackay/itila/" }],
   },
+  {
+    id: "concentration",
+    title: "Concentration et généralisation",
+    what: "Inégalités de Markov, Chebyshev et Hoeffding, bornes de généralisation, probabilités en grande dimension.",
+    why: "Elles disent pourquoi un modèle qui marche sur ses données d'entraînement marche aussi sur des données nouvelles.",
+    resources: [
+      { label: "Understanding Machine Learning, Shalev-Shwartz et Ben-David (PDF gratuit)", url: "https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/" },
+      { label: "High-Dimensional Probability, Roman Vershynin (PDF gratuit)", url: "https://www.math.uci.edu/~rvershyn/papers/HDP-book/HDP-book.html" },
+    ],
+  },
+  {
+    id: "markov",
+    title: "Chaînes de Markov, processus stochastiques et diffusion",
+    what: "Chaînes de Markov, loi stationnaire, marches aléatoires, puis équations différentielles stochastiques.",
+    why: "On les retrouve dans le MCMC, l'apprentissage par renforcement et les modèles de diffusion qui génèrent des images.",
+    resources: [
+      { label: "Grinstead et Snell, Introduction to Probability, ch. 11 et 12 (PDF gratuit)", url: "https://math.dartmouth.edu/~prob/prob/prob.pdf" },
+      { label: "Lilian Weng, What are Diffusion Models? (article de synthèse)", url: "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/" },
+      { label: "Song et al. 2021, Score-Based Generative Modeling through SDEs", url: "https://arxiv.org/abs/2011.13456" },
+    ],
+  },
 ];
 
 // What happens alongside the math: without it, math alone isn't enough.

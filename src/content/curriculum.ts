@@ -103,6 +103,45 @@ import { LagrangeLesson } from "./lagrange/Lesson";
 import { dualiteCards } from "./dualite/cards";
 import { dualiteGenerators } from "./dualite/exercises";
 import { DualiteLesson } from "./dualite/Lesson";
+import { entropieCards } from "./entropie/cards";
+import { entropieGenerators } from "./entropie/exercises";
+import { EntropieLesson } from "./entropie/Lesson";
+import { entropieCroiseeCards } from "./entropie-croisee/cards";
+import { entropieCroiseeGenerators } from "./entropie-croisee/exercises";
+import { EntropieCroiseeLesson } from "./entropie-croisee/Lesson";
+import { informationMutuelleCards } from "./information-mutuelle/cards";
+import { informationMutuelleGenerators } from "./information-mutuelle/exercises";
+import { InformationMutuelleLesson } from "./information-mutuelle/Lesson";
+import { klEntrainementCards } from "./kl-entrainement/cards";
+import { klEntrainementGenerators } from "./kl-entrainement/exercises";
+import { KlEntrainementLesson } from "./kl-entrainement/Lesson";
+import { hoeffdingCards } from "./hoeffding/cards";
+import { hoeffdingGenerators } from "./hoeffding/exercises";
+import { HoeffdingLesson } from "./hoeffding/Lesson";
+import { pacCards } from "./pac/cards";
+import { pacGenerators } from "./pac/exercises";
+import { PacLesson } from "./pac/Lesson";
+import { vcDimensionCards } from "./vc-dimension/cards";
+import { vcDimensionGenerators } from "./vc-dimension/exercises";
+import { VcDimensionLesson } from "./vc-dimension/Lesson";
+import { grandeDimensionCards } from "./grande-dimension/cards";
+import { grandeDimensionGenerators } from "./grande-dimension/exercises";
+import { GrandeDimensionLesson } from "./grande-dimension/Lesson";
+import { chainesMarkovCards } from "./chaines-markov/cards";
+import { chainesMarkovGenerators } from "./chaines-markov/exercises";
+import { ChainesMarkovLesson } from "./chaines-markov/Lesson";
+import { loiStationnaireCards } from "./loi-stationnaire/cards";
+import { loiStationnaireGenerators } from "./loi-stationnaire/exercises";
+import { LoiStationnaireLesson } from "./loi-stationnaire/Lesson";
+import { mcmcCards } from "./mcmc/cards";
+import { mcmcGenerators } from "./mcmc/exercises";
+import { McmcLesson } from "./mcmc/Lesson";
+import { marchesAleatoiresCards } from "./marches-aleatoires/cards";
+import { marchesAleatoiresGenerators } from "./marches-aleatoires/exercises";
+import { MarchesAleatoiresLesson } from "./marches-aleatoires/Lesson";
+import { diffusionCards } from "./diffusion/cards";
+import { diffusionGenerators } from "./diffusion/exercises";
+import { DiffusionLesson } from "./diffusion/Lesson";
 import type { SkillNode } from "./types";
 
 export type Module = { id: string; title: string; nodes: SkillNode[] };
@@ -399,11 +438,127 @@ export const multivariable: SkillNode[] = [
   },
 ];
 
+export const information: SkillNode[] = [
+  {
+    id: "entropie",
+    title: "Entropie : mesurer l'information",
+    bridge: "Combien de bits faut-il, au minimum, pour compresser un texte",
+    lesson: EntropieLesson,
+    generators: entropieGenerators,
+    cards: entropieCards,
+  },
+  {
+    id: "entropie-croisee",
+    title: "Entropie croisée et divergence de Kullback-Leibler",
+    bridge: "La perte de tout classifieur et de tout modèle de langage",
+    lesson: EntropieCroiseeLesson,
+    generators: entropieCroiseeGenerators,
+    cards: entropieCroiseeCards,
+  },
+  {
+    id: "information-mutuelle",
+    title: "Entropie conditionnelle et information mutuelle",
+    bridge: "Le gain d'information qui choisit les questions d'un arbre de décision",
+    lesson: InformationMutuelleLesson,
+    generators: informationMutuelleGenerators,
+    cards: informationMutuelleCards,
+  },
+  {
+    id: "kl-entrainement",
+    title: "La divergence KL dans l'entraînement",
+    bridge: "VAE, distillation, et le terme qui retient un modèle affiné par RLHF",
+    lesson: KlEntrainementLesson,
+    generators: klEntrainementGenerators,
+    cards: klEntrainementCards,
+  },
+];
+
+export const concentration: SkillNode[] = [
+  {
+    id: "hoeffding",
+    title: "Concentration : de Markov à Hoeffding",
+    bridge: "Combien d'exemples de test faut-il pour croire une précision mesurée",
+    lesson: HoeffdingLesson,
+    generators: hoeffdingGenerators,
+    cards: hoeffdingCards,
+  },
+  {
+    id: "pac",
+    title: "Apprendre avec garantie : le cadre PAC",
+    bridge: "Pourquoi un modèle choisi parmi beaucoup d'autres peut sur-apprendre, et de combien",
+    lesson: PacLesson,
+    generators: pacGenerators,
+    cards: pacCards,
+  },
+  {
+    id: "vc-dimension",
+    title: "Classes infinies : la dimension VC",
+    bridge: "Mesurer la capacité d'un classifieur linéaire, qui a une infinité de réglages",
+    lesson: VcDimensionLesson,
+    generators: vcDimensionGenerators,
+    cards: vcDimensionCards,
+  },
+  {
+    id: "grande-dimension",
+    title: "Probabilités en grande dimension",
+    bridge: "Pourquoi deux embeddings au hasard sont presque orthogonaux, et le 1/√d de l'attention",
+    lesson: GrandeDimensionLesson,
+    generators: grandeDimensionGenerators,
+    cards: grandeDimensionCards,
+  },
+];
+
+export const markov: SkillNode[] = [
+  {
+    id: "chaines-markov",
+    title: "Chaînes de Markov",
+    bridge: "Un modèle bigramme génère du texte en marchant sur une chaîne de Markov",
+    lesson: ChainesMarkovLesson,
+    generators: chainesMarkovGenerators,
+    cards: chainesMarkovCards,
+  },
+  {
+    id: "loi-stationnaire",
+    title: "Loi stationnaire et convergence",
+    bridge: "PageRank classe les pages web par la loi d'équilibre d'une marche aléatoire",
+    lesson: LoiStationnaireLesson,
+    generators: loiStationnaireGenerators,
+    cards: loiStationnaireCards,
+  },
+  {
+    id: "mcmc",
+    title: "Échantillonner par MCMC : Metropolis-Hastings",
+    bridge: "Tirer selon une loi connue à une constante près, comme une loi a posteriori",
+    lesson: McmcLesson,
+    generators: mcmcGenerators,
+    cards: mcmcCards,
+  },
+  {
+    id: "marches-aleatoires",
+    title: "Marches aléatoires et mouvement brownien",
+    bridge: "Ajouter du bruit pas à pas, jusqu'à la limite continue",
+    lesson: MarchesAleatoiresLesson,
+    generators: marchesAleatoiresGenerators,
+    cards: marchesAleatoiresCards,
+  },
+  {
+    id: "diffusion",
+    title: "Les modèles de diffusion",
+    bridge: "Comment un générateur d'images part du bruit pur pour arriver à une image",
+    lesson: DiffusionLesson,
+    generators: diffusionGenerators,
+    cards: diffusionCards,
+  },
+];
+
 export const modules: Module[] = [
   { id: "analyse", title: "Analyse", nodes: analyse },
   { id: "algebre-lineaire", title: "Algèbre linéaire", nodes: algebreLineaire },
   { id: "probas", title: "Probabilités et statistiques", nodes: probas },
   { id: "multivariable", title: "Calcul multivariable et optimisation", nodes: multivariable },
+  { id: "information", title: "Théorie de l'information", nodes: information },
+  { id: "concentration", title: "Concentration et généralisation", nodes: concentration },
+  { id: "markov", title: "Chaînes de Markov et diffusion", nodes: markov },
 ];
 
 export const allNodes: SkillNode[] = modules.flatMap((m) => m.nodes);

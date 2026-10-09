@@ -1003,6 +1003,133 @@ kbd {
   height: 100%;
 }
 
+.entropy-row {
+  grid-template-columns: 7.5rem 1fr 3.6rem 4.6rem;
+}
+
+.entropy-row .viz-readout {
+  white-space: nowrap;
+}
+
+/* Narrow screens: name and readouts on one line, the bar below at full width. */
+@media (max-width: 480px) {
+  .entropy-row {
+    grid-template-columns: 1fr auto auto;
+    row-gap: 0.2rem;
+  }
+
+  .entropy-row .token-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+/* True law against model: two thin bars per token, and H(p, q) as H(p) then KL side by side. */
+.kl-row {
+  grid-template-columns: 7.5rem 1fr 3.6rem 3.6rem;
+}
+
+.kl-tracks {
+  display: grid;
+  gap: 2px;
+}
+
+.kl-track {
+  height: 0.5rem;
+}
+
+.kl-stack {
+  display: flex;
+}
+
+.kl-true {
+  background: var(--text-muted);
+}
+
+.kl-swatch {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin: 0 0.3em 0 0.6em;
+  vertical-align: -0.05em;
+}
+
+.kl-swatch:first-child {
+  margin-left: 0;
+}
+
+@media (max-width: 480px) {
+  .kl-row {
+    grid-template-columns: 1fr auto auto;
+    row-gap: 0.2rem;
+  }
+
+  .kl-row .kl-tracks {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+/* Mutual information: joint table, then H(X, Y), H(X) and H(Y) as overlapping bars (MacKay, figure 8.1). */
+.mi-body {
+  padding: 0.9rem 1.1rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+.mi-table {
+  margin: 0 auto 1rem;
+  border-collapse: collapse;
+}
+
+.mi-table caption {
+  margin-bottom: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.mi-table th,
+.mi-table td {
+  padding: 0.25rem 0.8rem;
+  border: 1px solid var(--grid);
+  text-align: center;
+}
+
+.mi-bars {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  align-items: center;
+  gap: 0.45rem 0.6rem;
+}
+
+.mi-track {
+  position: relative;
+  height: 1rem;
+  background: color-mix(in srgb, var(--grid) 60%, var(--paper));
+}
+
+.mi-seg {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+.mi-key {
+  white-space: nowrap;
+}
+
+/* KL fits (ModeViz): three columns that must fit a phone-width figure. */
+@media (max-width: 480px) {
+  .mode-table {
+    font-size: 0.9rem;
+  }
+
+  .mode-table th,
+  .mode-table td {
+    padding: 0.25rem 0.35rem;
+  }
+}
+
 .token-row .viz-readout {
   text-align: right;
 }
@@ -1110,6 +1237,13 @@ kbd {
 }
 
 .loss-target {
+  stroke: #2f9e5b;
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.loss-ref {
+  fill: none;
   stroke: #2f9e5b;
   stroke-width: 1;
   stroke-dasharray: 4 3;
