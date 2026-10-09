@@ -47,8 +47,13 @@ function detTriangular(): Exercise {
   const n = pick([3, 4]);
   const upper = Math.random() < 0.5;
   const A = Array.from({ length: n }, (_, i) =>
-    Array.from({ length: n }, (_, j) => (i === j ? randInt(-3, 3) : (upper ? j > i : j < i) ? randInt(-5, 5) : 0)),
+    Array.from({ length: n }, (_, j) => (i === j ? randNonZero(-3, 3) : (upper ? j > i : j < i) ? randInt(-5, 5) : 0)),
   );
+  // A zero pivot (det = 0) in 15 % of cases only, so that guessing 0 does not pay.
+  if (Math.random() < 0.15) {
+    const k = randInt(0, n - 1);
+    A[k][k] = 0;
+  }
   const diag = A.map((r, i) => r[i]);
   const answer = diag.reduce((s, x) => s * x, 1);
   return {

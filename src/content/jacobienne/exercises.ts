@@ -89,7 +89,7 @@ function jacLinearization(): Exercise {
 function jacActivation(): Exercise {
   const n = 3;
   const i = randInt(1, n);
-  const j = Math.random() < 0.6 ? i : pick([1, 2, 3].filter((k) => k !== i));
+  const j = Math.random() < 0.75 ? i : pick([1, 2, 3].filter((k) => k !== i));
   const kind = randInt(0, 2);
   if (kind === 0) {
     const z = Array.from({ length: n }, () => randNonZero(-5, 5));
@@ -152,13 +152,13 @@ function jacSoftmax(): Exercise {
 }
 
 // Jacobian of a ReLU layer a = ReLU(Wx + b): entry (i, j) is W_ij if z_i > 0, else 0.
-function jacLayer(): Exercise {
-  const W = Array.from({ length: 2 }, () => Array.from({ length: 3 }, () => randInt(-3, 3)));
+function jacLayer(wantDead = Math.random() < 0.3, i = randInt(1, 2)): Exercise {
+  // Non-zero W, and the asked neuron is off (answer 0) in 30 % of cases only.
+  const W = Array.from({ length: 2 }, () => Array.from({ length: 3 }, () => randNonZero(-3, 3)));
   const x = Array.from({ length: 3 }, () => randInt(-2, 2));
   const b = Array.from({ length: 2 }, () => randInt(-3, 3));
   const z = W.map((row, i) => row.reduce((s, v, k) => s + v * x[k], 0) + b[i]);
-  if (z.some((v) => v === 0)) return jacLayer();
-  const i = randInt(1, 2);
+  if (z.some((v) => v === 0) || z[i - 1] < 0 !== wantDead) return jacLayer(wantDead, i);
   const j = randInt(1, 3);
   const ans = z[i - 1] > 0 ? W[i - 1][j - 1] : 0;
   const mat = `\\begin{pmatrix} ${W[0].join(" & ")} \\\\ ${W[1].join(" & ")} \\end{pmatrix}`;
