@@ -75,25 +75,61 @@ export function MeteorScene({ trace, step, showVision }: { trace: unknown[]; ste
   );
 }
 
-// Loss per gradient-descent iteration, log scale, with the target (1 % above the least-squares loss).
-export function LossChart({ losses, target }: { losses: number[]; target: number }) {
+// Variance of the pre-activations layer by layer (log scale): the player's init, and Xavier's dashed.
+export function DepthChart({ ours, xavier }: { ours: number[]; xavier: number[] }) {
+  const W = 300;
+  const H = 142;
+  const logs = [...ours, ...xavier].map(Math.log10);
+  const lo = Math.floor(Math.min(...logs));
+  const hi = Math.ceil(Math.max(...logs));
+  const px = (i: number) => 30 + (i / Math.max(1, ours.length - 1)) * (W - 38);
+  const py = (v: number) => 8 + ((hi - Math.log10(v)) / Math.max(1, hi - lo)) * (H - 48);
+  const line = (vs: number[]) => vs.map((v, i) => `${px(i)},${py(v)}`).join(" ");
+  return (
+    <svg className="loss-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Variance des pré-activations, couche par couche">
+      <polyline points={line(xavier)} className="loss-ref" />
+      <polyline points={line(ours)} className="loss-line" />
+      <text x={26} y={py(10 ** hi) + 3} className="loss-label" textAnchor="end">
+        {`1e${hi}`}
+      </text>
+      <text x={26} y={py(10 ** lo) + 3} className="loss-label" textAnchor="end">
+        {`1e${lo}`}
+      </text>
+      <text x={px(0)} y={H - 28} className="loss-label">
+        couche 1
+      </text>
+      <text x={W - 8} y={H - 28} className="loss-label" textAnchor="end">
+        {ours.length}
+      </text>
+      <text x={W / 2} y={H - 16} className="loss-label" textAnchor="middle">
+        variance du signal par couche (échelle log)
+      </text>
+      <text x={W / 2} y={H - 4} className="loss-label" textAnchor="middle">
+        ton initialisation en trait plein, Xavier en pointillés
+      </text>
+    </svg>
+  );
+}
+
+// Loss per training iteration, log scale, with the target if there is one (1 % above the least-squares loss).
+export function LossChart({ losses, target, unit = "itération" }: { losses: number[]; target?: number; unit?: string }) {
   const W = 300;
   const H = 110;
   const shown = losses.slice(0, 200);
   const logs = shown.map((l) => Math.log10(l));
-  const lo = Math.min(Math.log10(target), ...logs) - 0.05;
+  const lo = Math.min(...(target === undefined ? [] : [Math.log10(target)]), ...logs) - 0.05;
   const hi = Math.max(...logs, lo + 0.1);
   const px = (i: number) => 8 + (i / Math.max(1, shown.length - 1)) * (W - 16);
   const py = (v: number) => 8 + ((hi - v) / (hi - lo)) * (H - 24);
   return (
     <svg className="loss-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Courbe de la perte au fil des itérations">
-      <line x1={8} x2={W - 8} y1={py(Math.log10(target))} y2={py(Math.log10(target))} className="loss-target" />
+      {target !== undefined && <line x1={8} x2={W - 8} y1={py(Math.log10(target))} y2={py(Math.log10(target))} className="loss-target" />}
       <polyline points={logs.map((v, i) => `${px(i)},${py(v)}`).join(" ")} className="loss-line" />
       <text x={W / 2} y={H - 4} className="loss-label" textAnchor="middle">
-        perte (échelle log), cible en pointillés
+        {target === undefined ? "perte (échelle log)" : "perte (échelle log), cible en pointillés"}
       </text>
       <text x={8} y={H - 4} className="loss-label">
-        itération 0
+        {unit} 0
       </text>
       <text x={W - 8} y={H - 4} className="loss-label" textAnchor="end">
         {shown.length - 1}

@@ -1,4 +1,4 @@
-# Shared world of the project steps, run after the engine (PY_ENGINE) and before the player's code.
+# Shared world of the project steps, run after the engine (PY_ENGINE) and the expert (expert.py), before the player's code.
 # Names starting with "_" belong to the harness; the player uses Partie, expert and the functions of earlier steps.
 import json
 
@@ -11,35 +11,6 @@ _dep_error = None
 TRAIN_SEEDS = range(1000, 1030)  # the expert games the robot learns from (the same in every step)
 EVAL_SEEDS = range(1, 41)
 FILM_MAX = 160
-
-
-def _depths(partie):
-    """For each action -1, 0, +1: how many ticks one can survive at best, seeing only the visible meteors."""
-    occ = set(partie.meteores)
-    out = []
-    for a in (-1, 0, 1):
-        c0 = min(COLS - 1, max(0, partie.x + a))
-        if (c0, 1) in occ:
-            out.append(0)
-            continue
-        reach, depth = {c0}, 1
-        for k in range(2, ROWS):
-            nxt = {c + d for c in reach for d in (-1, 0, 1) if 0 <= c + d < COLS and (c + d, k) not in occ}
-            if not nxt:
-                break
-            reach, depth = nxt, k
-        out.append(depth)
-    return out
-
-
-def expert(partie):
-    """Le joueur expert : il voit tous les météores et joue le coup qui permet de survivre le plus longtemps."""
-    d = _depths(partie)
-    best = max(d)
-    if d[1] == best:
-        return 0
-    cands = [a for a in (-1, 1) if d[a + 1] == best]
-    return min(cands, key=lambda a: abs(partie.x + a - COLS // 2))
 
 
 def _vision_ref(partie):

@@ -1,20 +1,28 @@
+import { useState } from "react";
 import { getSolved } from "../quest/progress";
 import type { Level, Verdict } from "../quest/types";
 import { PY_ENGINE } from "./engine";
-import { LossChart, MeteorScene, resultOf } from "./MeteorScene";
+import { DepthChart, LossChart, MeteorScene, resultOf } from "./MeteorScene";
+import expertPy from "./py/expert.py?raw";
 import monde from "./py/monde.py?raw";
 import etape1 from "./py/etape1.py?raw";
 import etape2 from "./py/etape2.py?raw";
 import etape3 from "./py/etape3.py?raw";
 import etape4 from "./py/etape4.py?raw";
 import etape5 from "./py/etape5.py?raw";
+import etape6 from "./py/etape6.py?raw";
+import etape7 from "./py/etape7.py?raw";
+import etape8 from "./py/etape8.py?raw";
+import etape9 from "./py/etape9.py?raw";
+import etape10 from "./py/etape10.py?raw";
+import programme from "./py/programme.py?raw";
 
 // "A robot that learns": each step asks for one function; the functions validated in earlier steps are run
 // before the player's code (see monde.py), so the brain is assembled piece by piece.
 type Ctx = { seed: number; deps: [number, string | null][] };
 type R = Record<string, unknown>;
 
-const IDS = ["projet-vision", "projet-decision", "projet-apprendre", "projet-gradient", "projet-conditionnement"];
+const IDS = ["projet-vision", "projet-decision", "projet-apprendre", "projet-gradient", "projet-conditionnement", "projet-softmax", "projet-couche", "projet-retro", "projet-adam", "projet-cerveau"];
 
 const fr = (n: number, digits = 2) => n.toFixed(digits).replace(".", ",");
 // Inside $...$: KaTeX needs {,} for a decimal comma without a space after it.
@@ -44,13 +52,16 @@ function Scene({ trace, step, done, vision }: { trace: unknown[]; step: number; 
   return (
     <>
       <MeteorScene trace={trace} step={step} showVision={!!vision} />
-      {done && r && Array.isArray(r.pertes) && <LossChart losses={r.pertes as number[]} target={num(r, "cible")} />}
+      {done && r && Array.isArray(r.pertes) && (
+        <LossChart losses={r.pertes as number[]} target={r.cible as number | undefined} unit={r.n ? "passe" : undefined} />
+      )}
+      {done && r && Array.isArray(r.he) && <DepthChart ours={r.he as number[]} xavier={r.xavier as number[]} />}
     </>
   );
 }
 
 const common = {
-  prelude: `${PY_ENGINE}\n${monde}`,
+  prelude: `${PY_ENGINE}\n${expertPy}\n${monde}`,
   packages: ["numpy"],
   timeoutMs: 30000,
   stepMs: 70,
@@ -189,7 +200,7 @@ def apprendre(X, Y):
     return {
       ok: true,
       stars: 3,
-      message: `Équation normale vérifiée. Ton robot survit en moyenne ${fr(num(r, "survie"), 1)} ticks sur 300, contre une douzaine avec des poids au hasard. L'expert, lui, tient les 300 : un cerveau linéaire ne fait qu'additionner des cases pondérées. Pour aller plus loin, il lui faudra une couche cachée, dans une étape future.`,
+      message: `Équation normale vérifiée. Ton robot survit en moyenne ${fr(num(r, "survie"), 1)} ticks sur 300, contre une douzaine avec des poids au hasard. L'expert, lui, tient les 300. Une partie de l'écart vient de la perte : les moindres carrés sont mal faits pour choisir entre des classes (Bishop, §4.1.3). Une étape future en essaiera une autre.`,
     };
   }),
   Scene: ({ trace, step, done }) => <Scene trace={trace} step={step} done={done} />,
@@ -311,4 +322,369 @@ def normaliser(X):
   Scene: ({ trace, step, done }) => <Scene trace={trace} step={step} done={done} />,
 };
 
-export const projectSteps = [vision, decision, apprendre, gradient, conditionnement] as Level<unknown>[];
+const vec3 = (v: number[], digits = 4) => `(${v.map((x) => fr(x, digits)).join(" ; ")})`;
+
+const probas: Level<Ctx> = {
+  ...common,
+  id: IDS[5],
+  nodeId: "entropie-croisee",
+  title: "Des scores aux probabilités",
+  story: [
+    "Sixième pièce : la perte. À l'étape 3, ton robot linéaire survivait 86 ticks en moyenne. Le cerveau n'est pas seul en cause : les moindres carrés reviennent à supposer un bruit gaussien autour des cibles 0 et 1, ce qu'un one-hot n'est pas du tout, et ils pénalisent même les prédictions « trop correctes », loin du bon côté de la frontière (Bishop, Pattern Recognition and Machine Learning, §4.1.3).",
+    "Le remède : changer les scores en probabilités avec la softmax, ${p_k = e^{s_k} / \\sum_j e^{s_j}}$, et mesurer l'entropie croisée moyenne ${L = -\\frac{1}{N} \\sum_n \\log p_{n, y_n}}$, où $y_n$ est le coup de l'expert (PRML, éq. 4.104 et 4.108). Son gradient garde la forme simple des moindres carrés : par rapport à la ligne $k$ de $W$, c'est ${\\frac{1}{N} \\sum_n (p_{nk} - y_{nk})\\, v_n}$ (éq. 4.109).",
+    "Attention aux grands scores : $e^{1000}$ dépasse ce qu'un flottant peut contenir. La softmax ne change pas si l'on retranche le même nombre à tous les scores, donc on retranche le plus grand, ${m = \\max_j s_j}$. Pour la perte, on calcule directement ${\\log p_k = s_k - m - \\log \\sum_j e^{s_j - m}}$, plutôt que le log d'une softmax qui peut valoir 0 (Goodfellow et al., Deep Learning, §4.1).",
+    "Le test vérifie tes deux fonctions, puis entraîne le cerveau linéaire sur l'entropie croisée, sur tes données normalisées de l'étape 5, par la méthode de Newton (l'algorithme IRLS de PRML, §4.3.3). Étoiles : 1 si tes fonctions sont justes, une de plus pour chacune qui résiste aux grands scores.",
+  ],
+  api: [
+    { sig: "S, Y", doc: "Les scores (N × 3, une ligne par exemple) et les coups de l'expert en one-hot (N × 3)." },
+    { sig: "S.max(axis=1, keepdims=True)", doc: "Le plus grand score de chaque ligne, en colonne : S - m retranche à chaque ligne son maximum." },
+    { sig: "E.sum(axis=1, keepdims=True)", doc: "La somme de chaque ligne, en colonne ; np.exp et np.log agissent terme à terme." },
+    { sig: "np.sum(Y * logP)", doc: "Y vaut 1 sur le bon coup et 0 ailleurs : ce produit garde, sur chaque ligne, le log-probabilité du bon coup." },
+  ],
+  starter: `import numpy as np
+
+
+def softmax(S):
+    """S : une ligne de 3 scores par exemple (N x 3). Renvoie les probabilités, ligne par ligne."""
+    E = np.exp(S)  # attention aux grands scores
+    return E  # À toi : chaque ligne doit sommer à 1
+
+
+def entropie_croisee(S, Y):
+    """Moyenne sur les N exemples de -log p(coup de l'expert), à partir des scores S et de Y en one-hot."""
+    return 0.0  # À toi
+`,
+  hint: "Avec m = S.max(axis=1, keepdims=True) : la softmax est E = np.exp(S - m) divisé par E.sum(axis=1, keepdims=True). Pour la perte : logP = S - m - np.log(np.exp(S - m).sum(axis=1, keepdims=True)), puis -np.sum(Y * logP) / len(S).",
+  newContext: context(6),
+  postlude: etape6,
+  judge: judgeWith((r) => {
+    if (!r.soft) {
+      if (!r.got) return { ok: false, stars: 0, message: "softmax doit renvoyer un tableau de la même taille que S (N × 3)." };
+      return {
+        ok: false,
+        stars: 0,
+        message: `Ta softmax est fausse. Pour les scores ${vec3(r.s as number[], 2)}, il fallait ${vec3(r.ref as number[])}, ta fonction donne ${vec3(r.got as number[])}.`,
+      };
+    }
+    if (!r.ce) {
+      const got = r.got as number | null;
+      const ratio = r.full_got !== null ? num(r, "full_got") / num(r, "full_ref") : 0;
+      return {
+        ok: false,
+        stars: 0,
+        message: `Ta perte est fausse. Sur les deux premiers exemples, elle vaut ${fr(num(r, "ref"), 4)}, ta fonction donne ${got === null ? "autre chose qu'un nombre" : fr(got, 4)}.${Math.abs(ratio - 200) < 1e-6 ? " Sur 200 exemples, ta valeur est 200 fois trop grande : il faut la moyenne, pas la somme." : ""}`,
+      };
+    }
+    if (!r.train) return { ok: false, stars: 0, message: "L'entraînement s'est arrêté : ta softmax ou ta perte a renvoyé une valeur qui n'est pas finie." };
+    const notes = [
+      r.stable_soft ? "" : " Ta softmax ne résiste pas aux scores (1000 ; 999 ; −1000) : retranche d'abord le plus grand score de chaque ligne.",
+      r.stable_ce ? "" : " Ta perte ne vaut pas 800 pour les scores (0 ; 800 ; 0) quand le bon coup est le premier : calcule log p sans passer par la softmax.",
+    ].join("");
+    return {
+      ok: true,
+      stars: 1 + (r.stable_soft ? 1 : 0) + (r.stable_ce ? 1 : 0),
+      message: `Newton a convergé en ${r.its} itérations, jusqu'à une perte de ${fr(num(r, "perte"), 4)}. Avec l'entropie croisée, le même cerveau linéaire survit en moyenne ${fr(num(r, "survie"), 1)} ticks, contre ${fr(num(r, "survie_ls"), 1)} avec les moindres carrés de l'étape 3.${notes}`,
+    };
+  }),
+  Scene: ({ trace, step, done }) => <Scene trace={trace} step={step} done={done} />,
+};
+
+const couche: Level<Ctx> = {
+  ...common,
+  id: IDS[6],
+  nodeId: "lois-continues",
+  title: "La couche cachée",
+  story: [
+    "Septième pièce : la couche cachée. Le cerveau devient un réseau de neurones : la vision normalisée $v$ (20 nombres) passe par 32 neurones, ${h = \\mathrm{ReLU}(W_1 v + b_1)}$, où ${\\mathrm{ReLU}(z) = \\max(z, 0)}$ agit sur chaque coordonnée, puis donne les scores ${s = W_2 h + b_2}$. $W_1$ est de taille $32 \\times 20$ et $W_2$ de taille $3 \\times 32$. Ta fonction propager fait ce calcul pour $N$ visions à la fois, rangées en lignes dans $X$ : $S = \\mathrm{ReLU}(X W_1^\\top + b_1)\\, W_2^\\top + b_2$.",
+    "Avant d'apprendre, il faut des poids de départ. Ils ne peuvent pas être tous égaux : deux neurones identiques reçoivent les mêmes mises à jour et le restent (Goodfellow et al., Deep Learning, §8.4). On les tire donc au hasard, mais pas n'importe comment : chaque couche multiplie la variance du signal par ${\\frac{1}{2} n \\mathrm{Var}[w]}$, où $n$ est son nombre d'entrées et où le $\\frac{1}{2}$ vient de la ReLU, qui annule la moitié négative (He et al., « Delving Deep into Rectifiers », 2015, éq. 8). Pour garder ce facteur à 1, He et al. tirent ${w \\sim N(0, 2/n)}$ et mettent les biais à 0 (éq. 10).",
+    "Le test vérifie propager, puis ton initialisation sur des dizaines de milliers de poids (forme, biais nuls, moyenne, variance, loi gaussienne). Il empile ensuite 30 couches de 256 neurones tirées par ta fonction et suit la variance du signal couche après couche, à côté de ${\\mathrm{Var}[w] = 1/n}$, l'initialisation de Xavier sous la forme qu'en donnent He et al. : elle ignore la ReLU et perd un facteur 2 par couche. Sur leur modèle de 30 couches, c'est elle qui bloque l'apprentissage (fig. 3). Enfin ton robot joue avec un réseau tiré au hasard : il n'a encore rien appris, ce sera le rôle des étapes 8 et 9.",
+  ],
+  api: [
+    { sig: "rng.normal(0, ecart_type, size=(p, q))", doc: "Une matrice p × q de tirages gaussiens indépendants (rng est un générateur NumPy)." },
+    { sig: "np.zeros(p)", doc: "Un vecteur de p zéros." },
+    { sig: "np.maximum(Z, 0)", doc: "La ReLU, appliquée à chaque coefficient de Z." },
+    { sig: "X @ W1.T + b1", doc: "Les N vecteurs W₁v + b₁, rangés en lignes : b1 s'ajoute à chaque ligne." },
+  ],
+  starter: `import numpy as np
+
+
+def initialiser(n_entree, n_sortie, rng):
+    """Une couche de He : W (n_sortie x n_entree) tiré selon N(0, 2 / n_entree), et b = 0."""
+    W = np.zeros((n_sortie, n_entree))  # À toi
+    b = np.zeros(n_sortie)
+    return W, b
+
+
+def propager(W1, b1, W2, b2, X):
+    """X : une vision normalisée par ligne (N x 20). Renvoie les scores S (N x 3)."""
+    return np.zeros((len(X), 3))  # À toi
+`,
+  hint: "La loi $N(0, 2/n)$ a pour écart-type $\\sqrt{2/n}$ : W = rng.normal(0, np.sqrt(2 / n_entree), size=(n_sortie, n_entree)). Pour propager : H = np.maximum(X @ W1.T + b1, 0), puis renvoie H @ W2.T + b2.",
+  newContext: context(7),
+  postlude: etape7,
+  judge: judgeWith((r) => {
+    if (!r.fwd) {
+      if (r.got === null || r.got === undefined)
+        return { ok: false, stars: 0, message: `propager doit renvoyer un tableau N × 3 ; pour 50 visions, ta fonction renvoie ${r.size ?? "autre chose qu'un tableau de nombres"}${r.size ? " nombres au lieu de 150" : ""}.` };
+      if (r.no_relu) return { ok: false, stars: 0, message: "Ta fonction calcule le réseau sans la ReLU : sans elle, deux couches linéaires ne font qu'une seule matrice." };
+      return { ok: false, stars: 0, message: `propager est fausse. Pour la première vision du test, il fallait les scores ${vec3(r.ref as number[], 3)}, ta fonction donne ${vec3(r.got as number[], 3)}.` };
+    }
+    if (!r.init) {
+      if (r.pb === "forme")
+        return { ok: false, stars: 0, message: `Pour initialiser(${r.n_in}, ${r.n_out}, rng), W doit être de taille (${r.n_out}, ${r.n_in}) et b de taille (${r.n_out},) ; ta fonction renvoie (${(r.w as number[]).join(", ")}) et (${(r.b as number[]).join(", ")}).` };
+      if (r.pb === "biais") return { ok: false, stars: 0, message: "Les biais doivent partir de 0 (He et al., éq. 10)." };
+      if (r.pb === "loi")
+        return { ok: false, stars: 0, message: `Tes poids ont la bonne variance, mais pas une loi gaussienne : leur kurtosis vaut ${fr(num(r, "kurt"))}, contre 3 pour une gaussienne (1,8 pour une loi uniforme).` };
+      return {
+        ok: false,
+        stars: 0,
+        message: `Avec n_entree = ${r.n_in}, tes poids ont une moyenne de ${fr(num(r, "mean"), 5)} et une variance de ${fr(num(r, "var"), 5)} ; il faut une moyenne nulle et une variance de 2 / ${r.n_in} = ${fr(num(r, "ref"), 5)}.`,
+      };
+    }
+    const he = r.he as number[];
+    const xa = r.xavier as number[];
+    const sci = (x: number) => x.toExponential(1).replace(".", ",");
+    return {
+      ok: true,
+      stars: 3,
+      message: `Réseau et initialisation corrects. Sur 30 couches, la variance du signal passe de ${fr(he[0])} à ${fr(he[he.length - 1])} avec ton initialisation, et de ${fr(xa[0])} à ${sci(xa[xa.length - 1])} avec celle de Xavier. Pas encore entraîné, ton réseau survit ${fr(num(r, "survie"), 1)} ticks en moyenne : à lui d'apprendre.`,
+    };
+  }),
+  Scene: ({ trace, step, done }) => <Scene trace={trace} step={step} done={done} />,
+};
+
+const retro: Level<Ctx> = {
+  ...common,
+  id: IDS[7],
+  nodeId: "retropropagation",
+  title: "La rétropropagation",
+  story: [
+    "Huitième pièce : le gradient du réseau. Pour l'entraîner, il faut les dérivées de la perte (l'entropie croisée moyenne de l'étape 6) par rapport à ses 771 paramètres : 640 dans $W_1$, 32 dans $b_1$, 96 dans $W_2$, 3 dans $b_2$. La rétropropagation les obtient toutes en un aller-retour (Bishop, Pattern Recognition and Machine Learning, §5.3).",
+    "À l'aller, on garde ${Z = X W_1^\\top + b_1}$, ${H = \\mathrm{ReLU}(Z)}$ et ${S = H W_2^\\top + b_2}$. L'erreur des sorties est ${\\Delta_2 = (\\mathrm{softmax}(S) - Y) / N}$ : c'est $\\delta_k = y_k - t_k$ (éq. 5.54), divisé par $N$ parce que la perte est une moyenne. Chaque dérivée est l'erreur à la sortie d'un poids fois la valeur à son entrée (éq. 5.53) : ${\\nabla W_2 = \\Delta_2^\\top H}$, et $\\nabla b_2$ est la somme des lignes de $\\Delta_2$ (l'entrée d'un biais vaut 1).",
+    "Au retour, l'erreur traverse $W_2$ puis la ReLU (éq. 5.56) : ${\\Delta_1 = (\\Delta_2 W_2) \\odot \\mathbb{1}[Z > 0]}$, où $\\odot$ multiplie terme à terme : la dérivée de la ReLU vaut 1 là où $z > 0$, 0 ailleurs. Enfin ${\\nabla W_1 = \\Delta_1^\\top X}$, et $\\nabla b_1$ est la somme des lignes de $\\Delta_1$.",
+    "Pourquoi pas des différences finies, $\\frac{L(w + \\varepsilon) - L(w - \\varepsilon)}{2\\varepsilon}$ ? Il en faut deux passes avant par paramètre, soit $O(W^2)$ opérations au lieu de $O(W)$ (§5.3.3). Elles servent en revanche à vérifier une rétropropagation sur quelques poids (éq. 5.69). Le test compare tes gradients aux vrais, refait cette vérification, chronomètre les deux méthodes, puis fait 100 pas de descente de gradient avec tes gradients. L'entraînement complet viendra à l'étape 9.",
+  ],
+  api: [
+    { sig: "softmax(S), propager(W1, b1, W2, b2, X)", doc: "Tes fonctions des étapes 6 et 7, toujours disponibles." },
+    { sig: "A.T @ B", doc: "Le produit de la transposée de A par B." },
+    { sig: "D.sum(axis=0)", doc: "La somme des lignes de D (un vecteur)." },
+    { sig: "(Z > 0)", doc: "Un tableau de booléens ; multiplié par des nombres, True vaut 1 et False vaut 0." },
+  ],
+  starter: `import numpy as np
+
+
+def gradients(W1, b1, W2, b2, X, Y):
+    """Gradients de l'entropie croisée moyenne par rapport à W1, b1, W2, b2 (de mêmes tailles qu'eux)."""
+    Z = X @ W1.T + b1  # l'aller, en gardant ce qui servira au retour
+    H = np.maximum(Z, 0)
+    S = H @ W2.T + b2
+    D2 = np.zeros_like(S)  # À toi : l'erreur des sorties
+    gW2, gb2 = np.zeros_like(W2), np.zeros_like(b2)  # À toi
+    D1 = np.zeros_like(Z)  # À toi : l'erreur ramenée à la couche cachée
+    gW1, gb1 = np.zeros_like(W1), np.zeros_like(b1)  # À toi
+    return gW1, gb1, gW2, gb2
+`,
+  hint: "D2 = (softmax(S) - Y) / len(X) ; gW2 = D2.T @ H ; gb2 = D2.sum(axis=0) ; D1 = (D2 @ W2) * (Z > 0) ; gW1 = D1.T @ X ; gb1 = D1.sum(axis=0).",
+  newContext: context(8),
+  postlude: etape8,
+  judge: judgeWith((r) => {
+    if (!r.ok) {
+      if (r.pb === "nombre") return { ok: false, stars: 0, message: "gradients doit renvoyer quatre tableaux : les gradients de W1, b1, W2 et b2, dans cet ordre." };
+      if (r.pb === "forme")
+        return { ok: false, stars: 0, message: `Le gradient de ${r.name} doit avoir la taille de ${r.name}, (${(r.want as number[]).join(", ")}) ; le tien a la taille (${(r.shape as number[]).join(", ")}).` };
+      const where = `${r.name}[${(r.idx as number[]).join(", ")}]`;
+      const tips = [
+        r.mean_off ? " Ta valeur est 40 fois trop grande sur ces 40 exemples : la perte est une moyenne, divise par N." : "",
+        r.no_mask ? " Il manque la dérivée de la ReLU : multiplie par (Z > 0)." : "",
+      ].join("");
+      return {
+        ok: false,
+        stars: 0,
+        message: `Ton gradient de ${r.name} est faux. Par différences centrées, la dérivée de la perte par rapport à ${where} vaut ${fr(num(r, "slope"), 5)} ; ta fonction donne ${fr(num(r, "got"), 5)}.${tips}`,
+      };
+    }
+    const checks = r.checks as [number, number][];
+    const gap = Math.max(...checks.map(([a, b]) => Math.abs(a - b)));
+    const ms = (s: number) => fr(s * 1000, s < 0.01 ? 3 : 1);
+    const pertes = r.pertes as number[];
+    return {
+      ok: true,
+      stars: 3,
+      message: `Gradients exacts. Sur 5 poids de W1 tirés au hasard, différences centrées et rétropropagation diffèrent d'au plus ${gap.toExponential(0).replace(".", ",")}. Pour un gradient complet (${r.n_params} paramètres, 40 exemples), ta rétropropagation prend ${ms(num(r, "t_bp"))} ms, les différences centrées ${ms(num(r, "t_fd"))} ms. Avec tes gradients, 100 pas de descente (pas fixe 1) font passer la perte de ${fr(pertes[0], 3)} à ${fr(pertes[pertes.length - 1], 3)}.`,
+    };
+  }),
+  Scene: ({ trace, step, done }) => <Scene trace={trace} step={step} done={done} />,
+};
+
+const adam: Level<Ctx> = {
+  ...common,
+  timeoutMs: 60000, // about 11 s in Pyodide on a desktop CPU: margin for slower machines
+  id: IDS[8],
+  nodeId: "optimiseurs",
+  title: "Entraîner le réseau",
+  story: [
+    "Neuvième pièce : l'entraînement. Tu as le réseau (étape 7) et ses gradients (étape 8) ; reste la façon de descendre. Adam (Kingma et Ba, « Adam: A Method for Stochastic Optimization », algorithme 1) garde pour chaque paramètre deux moyennes mobiles, terme à terme : celle des gradients, ${m \\leftarrow \\beta_1 m + (1 - \\beta_1) g}$, et celle de leurs carrés, ${v \\leftarrow \\beta_2 v + (1 - \\beta_2) g^2}$.",
+    "Comme $m$ et $v$ partent de 0, leurs premières valeurs sont trop petites ; on les corrige au pas $t$ : ${\\hat m = m / (1 - \\beta_1^t)}$ et ${\\hat v = v / (1 - \\beta_2^t)}$ (§3 de l'article). Le pas est alors ${\\theta \\leftarrow \\theta - \\alpha\\, \\hat m / (\\sqrt{\\hat v} + \\varepsilon)}$, avec les réglages par défaut de l'article, ${\\beta_1 = 0{,}9}$, ${\\beta_2 = 0{,}999}$ et ${\\varepsilon = 10^{-8}}$, et ici ${\\alpha = 0{,}003}$.",
+    "Le test entraîne ton réseau par mini-lots : chaque pas calcule le gradient sur 256 exemples seulement, et l'on fait 60 passes sur les données, dans un ordre tiré au hasard à chaque passe (avec une graine fixe, pour retrouver le même cerveau à chaque essai).",
+    "Le réseau a 771 paramètres, le cerveau linéaire 63 : il lui faut plus d'exemples. En préparant ce niveau, sur 16 tirages de l'initialisation, un réseau entraîné sur les 30 parties des étapes précédentes n'a battu la softmax linéaire que 7 fois sur les 40 parties de test ; entraîné sur 100 parties, 16 fois sur 16. Le test prend donc 100 parties de l'expert, au lieu des 30 des étapes précédentes, réentraîne la softmax linéaire de l'étape 6 sur ces mêmes parties, et fait jouer les deux cerveaux sur les mêmes 40 parties.",
+  ],
+  api: [
+    { sig: "theta, g, m, v", doc: "Des tableaux de même taille : les paramètres, leur gradient et les deux moyennes mobiles (nulles au départ)." },
+    { sig: "t, alpha", doc: "Le numéro du pas (1 au premier appel) et le pas d'apprentissage α." },
+    { sig: "np.sqrt(A), A**2, beta1**t", doc: "Racine et carré terme à terme ; la puissance t d'un nombre." },
+  ],
+  starter: `import numpy as np
+
+
+def pas_adam(theta, g, m, v, t, alpha, beta1=0.9, beta2=0.999, eps=1e-8):
+    """Un pas d'Adam sur le tableau theta, de gradient g, au pas t (1, 2, 3...). Renvoie theta, m, v mis à jour."""
+    return theta - alpha * g, m, v  # À toi : ceci n'est qu'une descente de gradient
+`,
+  hint: "Dans l'ordre : m = beta1 * m + (1 - beta1) * g ; v = beta2 * v + (1 - beta2) * g**2 ; m_hat = m / (1 - beta1**t) ; v_hat = v / (1 - beta2**t) ; puis renvoie theta - alpha * m_hat / (np.sqrt(v_hat) + eps), m, v.",
+  newContext: context(9),
+  postlude: etape9,
+  judge: judgeWith((r) => {
+    if (!r.ok) {
+      if (r.pb === "nombre") return { ok: false, stars: 0, message: "pas_adam doit renvoyer trois tableaux : theta, m et v mis à jour." };
+      if (r.no_corr) return { ok: false, stars: 0, message: "Il manque la correction de biais (§3 de l'article) : divise m par 1 − β₁ᵗ et v par 1 − β₂ᵗ avant de faire le pas." };
+      if (r.eps_in) return { ok: false, stars: 0, message: "ε s'ajoute après la racine : il faut √v̂ + ε, et non √(v̂ + ε)." };
+      return { ok: false, stars: 0, message: `Au pas t = ${r.t}, ton ${r.which} ne correspond pas à l'algorithme 1 de Kingma et Ba.` };
+    }
+    const pertes = r.pertes as number[];
+    const net = num(r, "survie");
+    const lin = num(r, "survie_lin");
+    const verdict =
+      net > lin
+        ? `Ton réseau survit en moyenne ${fr(net, 1)} ticks sur les 40 parties de test, contre ${fr(lin, 1)} pour la softmax linéaire entraînée sur les mêmes parties.`
+        : `Ton réseau survit en moyenne ${fr(net, 1)} ticks sur les 40 parties de test : il ne fait pas mieux que la softmax linéaire entraînée sur les mêmes parties (${fr(lin, 1)}).`;
+    return {
+      ok: true,
+      stars: 3,
+      message: `Adam est exact. Sur ${num(r, "n").toLocaleString("fr-FR")} exemples, ${num(r, "pas").toLocaleString("fr-FR")} pas d'Adam font passer la perte de ${fr(pertes[0], 3)} à ${fr(pertes[pertes.length - 1], 3)}. ${verdict}`,
+    };
+  }),
+  Scene: ({ trace, step, done }) => <Scene trace={trace} step={step} done={done} />,
+};
+
+// The whole program: engine, expert, the player's validated code of every step, then the main program.
+// Null while a step is not validated yet.
+export function buildProgram(): string | null {
+  const codes = IDS.map((id) => getSolved(id));
+  if (codes.some((c) => !c)) return null;
+  const steps = codes.map((c, i) => `# ---- Étape ${i + 1} : ${projectSteps[i].title} ----\n${c!.trim()}\n`);
+  return [
+    "# cerveau.py : le robot de la pluie de météores, écrit étape par étape dans LearnMaths.",
+    "# Lancer : python cerveau.py (il faut Python 3 et NumPy).",
+    "import numpy as np\n",
+    PY_ENGINE.trim(),
+    "\n# ---- L'expert ----",
+    expertPy.trim(),
+    "",
+    ...steps,
+    "# ---- Le programme ----",
+    programme.trim(),
+    "",
+  ].join("\n");
+}
+
+function DownloadProgram() {
+  const [missing, setMissing] = useState(false);
+  const download = () => {
+    const text = buildProgram();
+    if (!text) {
+      setMissing(true);
+      return;
+    }
+    const url = URL.createObjectURL(new Blob([text], { type: "text/x-python;charset=utf-8" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cerveau.py";
+    a.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  return (
+    <p className="project-download">
+      <button type="button" className="btn btn-primary" onClick={download}>
+        Télécharger cerveau.py
+      </button>
+      {missing && " Il manque le code validé d'une étape : réussis d'abord les dix étapes."}
+    </p>
+  );
+}
+
+const assemblage: Level<Ctx> = {
+  ...common,
+  timeoutMs: 60000,
+  id: IDS[9],
+  nodeId: "retropropagation",
+  title: "Le cerveau complet",
+  story: [
+    "Dixième et dernière pièce : l'assemblage. Jusqu'ici, le test reliait tes fonctions entre elles ; c'est maintenant à toi. entrainer(X, Y, rng) écrit la boucle de l'étape 9 : ton initialisation, des mini-lots de 256 exemples, tes gradients, ton pas d'Adam avec ${\\alpha = 0{,}003}$, et 60 passes. cerveau(...) enchaîne ce que le robot fait à chaque tick : percevoir, normaliser avec $\\mu$ et $M$, propager, puis jouer le coup de meilleur score.",
+    "Le test entraîne ton réseau sur les 100 parties de l'expert. Il réussit si la perte d'entraînement passe sous 0,11196 : c'est, à $10^{-5}$ près, la plus petite perte qu'un cerveau linéaire puisse atteindre sur ces données (la perte d'une softmax linéaire est convexe en ses poids, et la méthode de Newton y converge). Ton réseau fait alors mieux que n'importe quel cerveau linéaire. Le test vérifie ensuite que cerveau joue le coup de meilleur score du réseau à chaque position de deux parties.",
+    "Une fois l'étape réussie, tu peux télécharger cerveau.py : tout ton code des dix étapes, avec le moteur du jeu et l'expert, en un seul programme. Avec Python 3 et NumPy, python cerveau.py refait l'apprentissage et affiche la survie de ton robot sur 40 parties.",
+  ],
+  api: [
+    { sig: "initialiser, gradients, pas_adam", doc: "Tes fonctions des étapes 7, 8 et 9." },
+    { sig: "percevoir(partie), propager(W1, b1, W2, b2, X)", doc: "Tes fonctions des étapes 1 et 7 ; propager attend une vision par ligne : v[None] fait d'un vecteur une matrice à une ligne." },
+    { sig: "rng.permutation(N), X[lot]", doc: "Les entiers de 0 à N − 1 dans un ordre aléatoire ; les lignes de X dont les indices sont dans lot." },
+  ],
+  starter: `import numpy as np
+
+
+def entrainer(X, Y, rng):
+    """Entraîne le réseau 20-32-3 sur X (visions normalisées) et Y (coups en one-hot). Renvoie W1, b1, W2, b2."""
+    W1, b1 = initialiser(X.shape[1], 32, rng)
+    W2, b2 = initialiser(32, 3, rng)
+    params = [W1, b1, W2, b2]
+    m = [np.zeros_like(p) for p in params]
+    v = [np.zeros_like(p) for p in params]
+    t = 0
+    for passe in range(60):
+        ordre = rng.permutation(len(X))
+        for i in range(0, len(X), 256):
+            lot = ordre[i:i + 256]
+            pass  # À toi : les gradients sur ce lot, puis un pas d'Adam (alpha = 0.003) sur chacun des 4 tableaux
+    return params
+
+
+def cerveau(W1, b1, W2, b2, mu, M, partie):
+    """Le coup du robot, -1, 0 ou +1 : vision, normalisation, réseau, puis le coup de meilleur score."""
+    return 0  # À toi
+`,
+  hint: "Dans la boucle : grads = gradients(*params, X[lot], Y[lot]), t += 1, puis pour k de 0 à 3 : params[k], m[k], v[k] = pas_adam(params[k], grads[k], m[k], v[k], t, 0.003). Pour cerveau : v = (percevoir(partie) - mu) @ M, puis renvoie int(np.argmax(propager(W1, b1, W2, b2, v[None])[0])) - 1.",
+  newContext: context(10),
+  postlude: etape10,
+  judge: judgeWith((r) => {
+    if (!r.ok) {
+      if (r.pb === "forme") {
+        const want = (r.want as number[][]).map((s) => `(${s.join(", ")})`).join(", ");
+        const got = r.got ? (r.got as number[][]).map((s) => `(${s.join(", ")})`).join(", ") : "autre chose que quatre tableaux";
+        return { ok: false, stars: 0, message: `entrainer doit renvoyer W1, b1, W2, b2 de tailles ${want} ; ta fonction renvoie ${got}.` };
+      }
+      if (r.pb === "perte")
+        return {
+          ok: false,
+          stars: 0,
+          message: `La perte d'entraînement de ton réseau vaut ${r.perte === null ? "autre chose qu'un nombre" : fr(num(r, "perte"), 4)} ; il faut passer sous 0,11196, la meilleure perte d'un cerveau linéaire sur ces données. Fais-tu bien un pas d'Adam sur les 4 tableaux, à chaque lot, pendant les 60 passes ?`,
+        };
+      return {
+        ok: false,
+        stars: 0,
+        message: `Ton réseau apprend bien (perte ${fr(num(r, "perte"), 4)}), mais au tick ${r.tick} d'une partie de l'expert, il donne son meilleur score au coup ${r.ref}, alors que cerveau renvoie ${r.got}.`,
+      };
+    }
+    return {
+      ok: true,
+      stars: 3,
+      message: `Ton réseau atteint une perte d'entraînement de ${fr(num(r, "perte"), 4)}, sous les 0,11196 du meilleur cerveau linéaire, et ton robot survit en moyenne ${fr(num(r, "survie"), 1)} ticks sur les 40 parties de test. Le cerveau est complet : tu peux télécharger ton programme.`,
+    };
+  }),
+  Scene: ({ trace, step, done }) => (
+    <>
+      <Scene trace={trace} step={step} done={done} />
+      {done && resultOf(trace)?.ok === true && <DownloadProgram />}
+    </>
+  ),
+};
+
+export const projectSteps = [vision, decision, apprendre, gradient, conditionnement, probas, couche, retro, adam, assemblage] as Level<unknown>[];
